@@ -81,10 +81,13 @@
         </nav>
     </header>
 
-    <main class="page-content" id="main-content">
+<main class="page-content" id="main-content">
         <section class="landing-section">
             <div class="container">
+                
+                {% if is_tag_page %}
                 <h2 class="hero-headline">{{ section_title }}</h2>
+                {% endif %}
                 
                 {% if posts %}
                     {% if is_tag_page %}
