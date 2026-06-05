@@ -1,6 +1,8 @@
 ---
 title: فضای منفی
+title_fn: ۱
 author: ران کُرچ
+author_fn: ۲
 translator: امیرمحمد شیرازیان
 cover: ronkoertge.jpg
 ---
@@ -13,5 +15,13 @@ cover: ronkoertge.jpg
 
 مراسم یادبود افتضاح بود. پدرم درازبه‌دراز در آن جعبه‌ی بزرگ خوابیده بود و من اشک می‌ریختم و به این فکر می‌کردم که «فقط نگاه کن به آن‌همه فضای هدررفته!»
 
-[^1]: Negative Space
-[^2]: Ron Koertge
+***
+
+### پانویس‌ها
+
+<div dir="ltr" class="footnotes-en">
+
+1. Negative Space
+2. Ron Koertge
+
+</div>
