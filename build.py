@@ -15,6 +15,7 @@ CATEGORY_TITLES: Dict[str, str] = {
 }
 
 MAIN_DIR = Path('main')
+TAGS_DIR = MAIN_DIR / 'tags'
 BASE_TEMPLATE_NAME = 'template.html'
 INDEX_TEMPLATE_NAME = 'index_template.html'
 
@@ -29,9 +30,9 @@ def build_site() -> None:
     print("Starting build process for ASB Publishing...")
     
     categories: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    tags_map: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     
     # --- Process Markdown Files ---
-    # rglob systematically finds all .md files in all subdirectories
     for md_path in MAIN_DIR.rglob('*.md'):
         try:
             with open(md_path, 'r', encoding='utf-8') as f:
@@ -48,6 +49,11 @@ def build_site() -> None:
             translator = post.get('translator', '')
             cover = post.get('cover', '')
             
+            # استخراج هشتگ‌ها از متادیتا
+            tags = post.get('tags', [])
+            if isinstance(tags, str):
+                tags = [t.strip() for t in tags.split(',')]
+            
             # Dynamically calculate path depth for relative linking
             depth = len(md_path.parts) - 1
             base_path = '../' * depth
@@ -59,6 +65,7 @@ def build_site() -> None:
                 author_fn=author_fn,
                 translator=translator,
                 cover=cover,
+                tags=tags, # ارسال هشتگ‌ها به قالب HTML
                 content=html_content,
                 base_path=base_path
             )
@@ -77,7 +84,6 @@ def build_site() -> None:
                 category = parts[1]
                 category_dir = MAIN_DIR / category
                 
-                # as_posix() ensures forward slashes for web URLs regardless of the OS
                 rel_path_to_post = html_path.relative_to(category_dir).as_posix()
                 
                 rel_path_to_cover = ''
@@ -92,6 +98,20 @@ def build_site() -> None:
                     'cover': rel_path_to_cover
                 })
                 
+                # --- Tagging Logic ---
+                for tag in tags:
+                    tag_rel_url = f"../../{html_path.relative_to(MAIN_DIR).as_posix()}"
+                    tag_rel_cover = ''
+                    if cover:
+                        tag_rel_cover = f"../../{md_path.parent.relative_to(MAIN_DIR).as_posix()}/{cover}"
+                    
+                    tags_map[tag].append({
+                        'title': title,
+                        'author': author,
+                        'url': tag_rel_url,
+                        'cover': tag_rel_cover
+                    })
+                    
         except Exception as e:
             print(f"Error processing {md_path}: {e}")
 
@@ -119,6 +139,30 @@ def build_site() -> None:
             
         except Exception as e:
             print(f"Error generating index for {category}: {e}")
+
+    # --- Generate Tag Index Pages ---
+    for tag, posts in tags_map.items():
+        try:
+            tag_dir = TAGS_DIR / tag
+            tag_dir.mkdir(parents=True, exist_ok=True)
+            
+            index_path = tag_dir / 'index.html'
+            base_path = '../../'
+            
+            final_index = index_template.render(
+                section_title=f"هشتگ: {tag}",
+                category='tags',
+                posts=posts,
+                base_path=base_path
+            )
+            
+            with open(index_path, 'w', encoding='utf-8') as f:
+                f.write(final_index)
+                
+            print(f"Successfully generated tag index for: {tag}")
+            
+        except Exception as e:
+            print(f"Error generating tag index for {tag}: {e}")
 
 if __name__ == '__main__':
     build_site()
