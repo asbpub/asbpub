@@ -217,9 +217,44 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .story-body strong { color: var(--text-primary); }
 .story-body em { font-style: italic; opacity: 0.9; }
 
+/* ==========================================================================
+   Poetry & Footnotes Styling
+   ========================================================================== */
+
+/* Poetry Styling */
+.poem {
+    text-align: center;
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin: 2.5rem auto;
+    padding: 1.5rem 2rem;
+    background-color: var(--bg-body);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    white-space: pre-line;
+    line-height: 2.4;
+    font-style: italic;
+}
+
 /* Footnotes inside stories */
-.footnotes-en { font-size: 0.85rem; color: var(--text-secondary); text-align: left; margin-top: 1.5rem; font-family: system-ui, sans-serif; }
-.footnotes-fa { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; }
+.footnotes-en { 
+    font-size: 0.9rem; 
+    color: var(--text-secondary); 
+    text-align: left; 
+    margin-top: 1.5rem; 
+    font-family: system-ui, sans-serif; 
+    white-space: pre-line;
+    line-height: 1.8;
+}
+
+.footnotes-fa { 
+    font-size: 0.9rem; 
+    color: var(--text-secondary); 
+    margin-top: 0.5rem; 
+    white-space: pre-line;
+    line-height: 1.8;
+}
 
 /* Tags Section */
 .story-tags-section {
