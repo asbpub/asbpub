@@ -126,9 +126,12 @@
             <header class="story-header">
                 <h1 class="story-title">{{ title }}{% if title_fn %}<sup>{{ title_fn }}</sup>{% endif %}</h1>
                 <div class="story-meta">
-                    <span class="meta-author">نوشته‌ی {{ author }}{% if author_fn %}<sup>{{ author_fn }}</sup>{% endif %}</span>
+                    {% if author %}
+                    <span class="meta-author">{{ author }}{% if author_fn %}<sup>{{ author_fn }}</sup>{% endif %}</span>
+                    {% endif %}
+                    
                     {% if translator %}
-                    <span class="meta-translator">ترجمه‌ی {{ translator }}</span>
+                    <span class="meta-translator">{{ translator }}</span>
                     {% endif %}
                 </div>
             </header>
@@ -136,6 +139,14 @@
             <div class="story-body">
                 {{ content }}
             </div>
+            
+            {% if tags %}
+            <footer class="story-tags-section">
+                {% for tag in tags %}
+                <a href="{{ base_path }}main/tags/{{ tag }}/index.html" class="tag-link">#{{ tag }}</a>
+                {% endfor %}
+            </footer>
+            {% endif %}
             
         </article>
     </main>
