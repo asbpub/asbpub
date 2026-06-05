@@ -485,3 +485,45 @@ sup {
     opacity: 0.7;
     animation: fadeUp 1s ease forwards;
 }
+
+/* ==========================================================================
+   Tags & Hashtags
+   ========================================================================== */
+.story-tags-section {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--border-subtle);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.tag-link {
+    background-color: var(--bg-body);
+    color: var(--text-secondary);
+    padding: 0.35rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--border-subtle);
+    transition: all var(--transition-fast);
+}
+
+.tag-link:hover {
+    color: var(--clr-yellow);
+    border-color: var(--clr-yellow);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* ==========================================================================
+   Poetry Layout Adjustments
+   ========================================================================== */
+.poem-style {
+    text-align: right;
+}
+
+.poem-style p + p {
+    text-indent: 0;
+    margin-top: 1.5rem;
+}
