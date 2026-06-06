@@ -6,9 +6,13 @@ import frontmatter
 from jinja2 import Environment, FileSystemLoader
 from collections import defaultdict
 from pathlib import Path
+from urllib.parse import quote
+from datetime import datetime
 from typing import Dict, List, Any
 
 # --- Configuration Constants ---
+SITE_URL = 'https://asbpub.vercel.app'
+
 CATEGORY_TITLES: Dict[str, str] = {
     'flashfictions': 'داستان برق‌آسا',
     'shortstories': 'داستان کوتاه',
@@ -39,7 +43,8 @@ def build_site() -> None:
     categories: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     tags_map: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     all_posts: List[Dict[str, Any]] = [] 
-    search_index: List[Dict[str, Any]] = [] # Added for Search
+    search_index: List[Dict[str, Any]] = [] 
+    sitemap_urls: List[str] = [''] # Initialize sitemap with root URL
     
     root_abs = Path('.').resolve()
     
@@ -89,8 +94,10 @@ def build_site() -> None:
             
             html_abs = html_path.resolve()
             
-            # --- Homepage & Search Logic ---
+            # --- Homepage, Search & Sitemap Logic ---
             rel_path_to_post_from_root = os.path.relpath(html_abs, root_abs).replace('\\', '/')
+            sitemap_urls.append(rel_path_to_post_from_root)
+            
             rel_path_to_cover_from_root = ''
             if cover:
                 cover_abs = (md_path.parent / cover).resolve()
@@ -107,7 +114,6 @@ def build_site() -> None:
             
             all_posts.append(post_data)
             
-            # Add to Search Index (only text data, no heavy content)
             search_index.append({
                 'title': title,
                 'author': author,
@@ -178,12 +184,15 @@ def build_site() -> None:
     except Exception as e:
         print(f"Error generating search JSON: {e}")
 
+    # --- Generate Category Index Pages ---
     for cat, section_title in CATEGORY_TITLES.items():
         try:
             cat_dir = MAIN_DIR / cat
             cat_dir.mkdir(parents=True, exist_ok=True)
             
             index_path = cat_dir / 'index.html'
+            sitemap_urls.append(f"main/{cat}/index.html")
+            
             posts = categories.get(cat, [])
             posts.sort(key=lambda x: x['date'], reverse=True)
             
@@ -199,12 +208,15 @@ def build_site() -> None:
         except Exception as e:
             print(f"Error generating index for {cat}: {e}")
 
+    # --- Generate Tag Index Pages ---
     for tag, posts in tags_map.items():
         try:
             tag_dir = TAGS_DIR / tag
             tag_dir.mkdir(parents=True, exist_ok=True)
             
             index_path = tag_dir / 'index.html'
+            sitemap_urls.append(f"main/tags/{quote(tag)}/index.html")
+            
             posts.sort(key=lambda x: x['date'], reverse=True)
             
             final_index = index_template.render(
@@ -218,6 +230,24 @@ def build_site() -> None:
                 f.write(final_index)
         except Exception as e:
             print(f"Error generating tag index for {tag}: {e}")
+
+    # --- Generate Sitemap XML ---
+    try:
+        today = datetime.now().strftime('%Y-%m-%d')
+        sitemap_content = ['<?xml version="1.0" encoding="UTF-8"?>']
+        sitemap_content.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+        
+        for url in sitemap_urls:
+            full_url = f"{SITE_URL}/{url}" if url else SITE_URL
+            sitemap_content.append(f'  <url>\n    <loc>{full_url}</loc>\n    <lastmod>{today}</lastmod>\n  </url>')
+            
+        sitemap_content.append('</urlset>')
+        
+        with open('sitemap.xml', 'w', encoding='utf-8') as f:
+            f.write('\n'.join(sitemap_content))
+        print("Successfully generated sitemap.xml")
+    except Exception as e:
+        print(f"Error generating sitemap: {e}")
 
 if __name__ == '__main__':
     build_site()
