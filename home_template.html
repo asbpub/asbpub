@@ -43,10 +43,6 @@
         </div>
         
         <nav class="primary-nav" id="quick-nav" aria-label="منوی اصلی ناوبری">
-            <!-- Search Trigger Button -->
-            <button id="search-trigger-btn" class="search-btn" aria-label="جست‌وجو در سایت">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </button>
             
             <button id="mobile-menu-btn" class="hamburger-btn" aria-expanded="false" aria-controls="nav-links-menu" aria-label="باز و بسته کردن منو">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -91,6 +87,18 @@
             <div class="container">
                 <h2 class="hero-headline">اسبی در نقطه‌ی شروع…</h2>
                 <p class="hero-subtext">این‌جا متنی برای معرفی کوتاه یا آخرین رویداد قرار می‌گیرد.</p>
+                
+                <!-- Inline Smart Search -->
+                <div class="inline-search-container">
+                    <div class="search-input-wrapper">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="inline-search-input" placeholder="جست‌وجو در داستان‌ها، نویسندگان و هشتگ‌ها..." autocomplete="off">
+                    </div>
+                    <div id="search-dropdown" class="search-dropdown">
+                        <ul id="search-results-list"></ul>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -133,18 +141,18 @@
         </section>
     </main>
 
-<footer class="main-footer">
+    <footer class="main-footer">
         <div class="container">
             <div class="footer-top">
                 
-                <!-- Right Section: Donate & QR Code -->
-                <div class="footer-donate">
+                <!-- Right Section: Donate & QR Code (Clickable) -->
+                <a href="https://daramet.com/asbpub" target="_blank" rel="noopener noreferrer" class="footer-donate">
                     <div class="donate-qr" style="-webkit-mask: url('{{ base_path }}donate/donate.svg') no-repeat center / contain; mask: url('{{ base_path }}donate/donate.svg') no-repeat center / contain;"></div>
                     <div class="donate-text">
                         <span class="donate-title">حمایت از ما</span>
-                        <span class="donate-subtitle">با اسکن این رمزینه حامی نشر اسب باشید.</span>
+                        <span class="donate-subtitle">با اسکن یا کلیک، حامی نشر اسب باشید.</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Left Section: Social Actions -->
                 <div class="footer-socials">
@@ -171,21 +179,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
     </button>
     
-<!-- Search Modal Overlay -->
-    <div id="search-overlay" class="search-overlay" aria-hidden="true">
-        <div class="search-modal">
-            <div class="search-header">
-                <input type="text" id="search-input" placeholder="جست‌وجو در داستان‌ها، نویسندگان و هشتگ‌ها..." autocomplete="off">
-                <button id="close-search-btn" aria-label="بستن جست‌وجو">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            <div class="search-results-container">
-                <ul id="search-results-list"></ul>
-            </div>
-        </div>
-    </div>
-
     <!-- Pass base path to JS for resolving JSON route -->
     <script>window.ASB_BASE_PATH = "{{ base_path }}";</script>
     <script src="{{ base_path }}js/main.js"></script>
