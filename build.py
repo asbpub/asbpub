@@ -1,5 +1,6 @@
 import os
 import re
+import json
 import markdown
 import frontmatter
 from jinja2 import Environment, FileSystemLoader
@@ -38,6 +39,7 @@ def build_site() -> None:
     categories: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     tags_map: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     all_posts: List[Dict[str, Any]] = [] 
+    search_index: List[Dict[str, Any]] = [] # Added for Search
     
     root_abs = Path('.').resolve()
     
@@ -87,20 +89,31 @@ def build_site() -> None:
             
             html_abs = html_path.resolve()
             
-            # --- Homepage Logic ---
+            # --- Homepage & Search Logic ---
             rel_path_to_post_from_root = os.path.relpath(html_abs, root_abs).replace('\\', '/')
             rel_path_to_cover_from_root = ''
             if cover:
                 cover_abs = (md_path.parent / cover).resolve()
                 rel_path_to_cover_from_root = os.path.relpath(cover_abs, root_abs).replace('\\', '/')
                 
-            all_posts.append({
+            post_data = {
                 'title': title,
                 'author': author,
                 'url': rel_path_to_post_from_root,
                 'cover': rel_path_to_cover_from_root,
                 'date': date,
                 'category': category 
+            }
+            
+            all_posts.append(post_data)
+            
+            # Add to Search Index (only text data, no heavy content)
+            search_index.append({
+                'title': title,
+                'author': author,
+                'tags': tags,
+                'category': CATEGORY_TITLES.get(category, category),
+                'url': rel_path_to_post_from_root
             })
             
             # --- Categorization Logic ---
@@ -146,16 +159,24 @@ def build_site() -> None:
         except Exception as e:
             print(f"Error processing {md_path}: {e}")
 
+    # --- Generate Homepage ---
     try:
         all_posts.sort(key=lambda x: x['date'], reverse=True)
         latest_posts = all_posts[:6]
         
-        # Added base_path='' here to fix the broken styling on Homepage!
         final_home = home_template.render(latest_posts=latest_posts, base_path='')
         with open('index.html', 'w', encoding='utf-8') as f:
             f.write(final_home)
     except Exception as e:
         print(f"Error generating homepage: {e}")
+
+    # --- Generate Search JSON ---
+    try:
+        with open('search.json', 'w', encoding='utf-8') as f:
+            json.dump(search_index, f, ensure_ascii=False)
+        print("Successfully generated search.json")
+    except Exception as e:
+        print(f"Error generating search JSON: {e}")
 
     for cat, section_title in CATEGORY_TITLES.items():
         try:
