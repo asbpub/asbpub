@@ -1,27 +1,22 @@
 /* ==========================================================================
    CSS Variables & Global Configuration
    ========================================================================== */
-   :root {
-    /* Typography Stack: Prioritizing local fonts for speed, falling back to system fonts */
+:root {
     --font-primary: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     
-    /* Single Theme Palette: Warm, reading-friendly background */
-    --bg-body: #FCFAF8;       /* Warm Cream/White */
-    --bg-surface: #FFFFFF;    /* Pure white for cards/boxes */
-    --text-primary: #1A1A1A;  /* High contrast almost-black */
-    --text-secondary: #5C5C5C;/* Gray for secondary text */
+    --bg-body: #FCFAF8;       
+    --bg-surface: #FFFFFF;    
+    --text-primary: #1A1A1A;  
+    --text-secondary: #5C5C5C;
     --border-subtle: rgba(0, 0, 0, 0.08);
     
-    /* Semantic Brand Colors */
-    --clr-ochre: #D49A00;     /* Primary Brand: Ochre Yellow */
-    --clr-blue: #34AAE1;      /* Accent Blue */
-    --clr-red: #D94848;       /* Accent Red */
+    --clr-ochre: #D49A00;     
+    --clr-blue: #34AAE1;      
+    --clr-red: #D94848;       
 
-    /* Scrollbar Config */
     --scrollbar-thumb: rgba(0, 0, 0, 0.2);
     --scrollbar-thumb-hover: rgba(212, 154, 0, 0.6);
 
-    /* Animation Timings */
     --transition-fast: 0.2s ease;
     --transition-standard: 0.3s ease;
     --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -36,7 +31,7 @@
 ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
 
 /* ==========================================================================
-   Resets & Accessibility Foundations
+   Resets & Foundations
    ========================================================================== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -47,7 +42,6 @@ html {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* A11y: Global Keyboard Focus Indicator */
 :focus-visible {
     outline: 2px solid var(--clr-ochre);
     outline-offset: 3px;
@@ -74,7 +68,7 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
 
 /* ==========================================================================
-   Smart Header & Branding
+   Header & Branding
    ========================================================================== */
 .smart-header {
     position: sticky; top: 0; left: 0; width: 100%;
@@ -109,9 +103,18 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 }
 
 /* ==========================================================================
-   Primary Navigation & Icons
+   Primary Navigation
    ========================================================================== */
-.primary-nav { width: 100%; padding-bottom: 1.5rem; }
+.primary-nav { 
+    width: 100%; 
+    padding-bottom: 1.5rem; 
+    display: flex;             
+    justify-content: center;   
+    align-items: center;       
+    gap: 1.5rem;               
+    position: relative;
+}
+
 .hamburger-btn { display: none; }
 .nav-links { display: flex; justify-content: center; gap: 2.5rem; list-style: none; }
 
@@ -133,7 +136,7 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .nav-item:hover::after, .nav-item.active::after { background-color: var(--clr-ochre); transform: scaleX(1); }
 
 /* ==========================================================================
-   Main Content Layout (Landing Pages)
+   Main Content Layout & Hero
    ========================================================================== */
 .page-content { flex-grow: 1; display: flex; flex-direction: column; width: 100%; }
 .landing-section { padding: 5rem 0; text-align: center; }
@@ -153,8 +156,106 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
 
 /* ==========================================================================
-   Content Grids (Archive & Tags Pages)
+   Inline Smart Search 
    ========================================================================== */
+.inline-search-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 2.5rem auto;
+    position: relative;
+    z-index: 50;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 30px;
+    padding: 0.6rem 1.5rem;
+    opacity: 0.6; /* Faded state initially */
+    transition: all var(--transition-standard);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.search-input-wrapper:focus-within {
+    opacity: 1; /* Fully visible on focus */
+    border-color: var(--clr-ochre);
+    box-shadow: 0 8px 25px rgba(212, 154, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.search-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+    margin-left: 10px;
+}
+
+.search-input-wrapper:focus-within .search-icon {
+    color: var(--clr-ochre);
+}
+
+#inline-search-input {
+    flex-grow: 1;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    outline: none;
+    padding: 0.3rem 0;
+}
+
+#inline-search-input::placeholder { color: var(--text-secondary); opacity: 0.7; }
+
+.search-dropdown {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    text-align: right;
+}
+
+.search-dropdown.active {
+    display: block;
+    animation: fadeUp 0.3s ease forwards;
+}
+
+#search-results-list { list-style: none; margin: 0; padding: 0.5rem 0; }
+#search-results-list li a {
+    display: flex; flex-direction: column; padding: 0.8rem 1.5rem; transition: background-color var(--transition-fast);
+}
+#search-results-list li a:hover { background-color: rgba(212, 154, 0, 0.05); border-right: 3px solid var(--clr-ochre); }
+.sr-title { font-weight: 700; color: var(--text-primary); font-size: 1.05rem; }
+.sr-meta { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem; }
+.sr-empty { padding: 1.5rem; text-align: center; color: var(--text-secondary); font-size: 0.95rem;}
+
+/* ==========================================================================
+   Category Headers & Grids
+   ========================================================================== */
+.category-group { width: 100%; margin-bottom: 3rem; }
+
+.category-group-header {
+    display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem; border-bottom: 1px dashed var(--border-subtle); color: var(--text-primary);
+}
+
+.category-group-header svg { width: 30px; height: 30px; stroke-width: 2.5; }
+.category-group-header h4 { font-size: 1.2rem; font-weight: 800; }
+
+.cat-flashfictions { color: var(--clr-red); }
+.cat-novels { color: var(--clr-blue); }
+.cat-shortstories { color: var(--clr-pink); }
+.cat-articles { color: var(--clr-ochre); }
+
 .content-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 2rem; width: 100%; max-width: 1100px; margin: 2rem auto 0 auto; justify-content: center;
@@ -182,7 +283,7 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .empty-state { padding: 3rem; color: var(--text-secondary); font-size: 1.2rem; }
 
 /* ==========================================================================
-   Story Reading Layout (Articles)
+   Story Reading Layout 
    ========================================================================== */
 .story-reading-layout { padding-top: 3rem; padding-bottom: 5rem; align-items: flex-start; }
 
@@ -192,7 +293,6 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     box-shadow: 0 4px 20px rgba(0,0,0,0.02);
 }
 
-/* Flexbox Header for Single Stories */
 .story-header {
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px dashed var(--border-subtle);
@@ -206,7 +306,6 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     border-radius: 50%; border: 2px solid var(--border-subtle); box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* Markdown Content Styling */
 .story-body { font-size: 1.15rem; line-height: 2.2; color: var(--text-primary); text-align: justify; }
 .story-body p { margin-bottom: 0; }
 .story-body p + p { text-indent: 2.5rem; margin-top: 0; }
@@ -217,43 +316,24 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .story-body strong { color: var(--text-primary); }
 .story-body em { font-style: italic; opacity: 0.9; }
 
-/* ==========================================================================
-   Poetry & Footnotes Styling
-   ========================================================================== */
 /* Poetry Styling */
 .poem {
-    text-align: center;
-    color: var(--text-primary);
-    font-size: 1.15rem;
-    font-weight: 500;
-    margin: 1.5rem auto;
-    padding: 0.5rem 2rem;
-    background-color: var(--bg-body);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    white-space: pre-line;
-    line-height: 2.2;
-    font-style: italic;
+    text-align: center; color: var(--text-primary); font-size: 1.15rem;
+    font-weight: 500; margin: 1.5rem auto; padding: 0.5rem 2rem;
+    background-color: var(--bg-body); border: 1px solid var(--border-subtle);
+    border-radius: 12px; white-space: pre-line; line-height: 2.2; font-style: italic;
 }
 
 /* Footnotes inside stories */
 .footnotes-en { 
-    font-size: 0.85rem; 
-    color: var(--text-secondary); 
-    text-align: left; 
-    margin-top: 2rem; 
-    margin-bottom: 0;
-    font-family: system-ui, sans-serif; 
-    white-space: pre-line; 
-    line-height: 1.8;
+    font-size: 0.85rem; color: var(--text-secondary); text-align: left; 
+    margin-top: 2rem; margin-bottom: 0; font-family: system-ui, sans-serif; 
+    white-space: pre-line; line-height: 1.8;
 }
 
 .footnotes-fa { 
-    font-size: 0.85rem; 
-    color: var(--text-secondary); 
-    margin-top: 0.5rem;
-    white-space: pre-line; 
-    line-height: 1.8;
+    font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;
+    white-space: pre-line; line-height: 1.8;
 }
 
 /* Tags Section */
@@ -261,12 +341,8 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px dashed var(--border-subtle);
     display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
 }
-.tags-fa {
-    display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: flex-start; flex: 1;
-}
-.tags-en {
-    display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: flex-end; flex: 1; direction: ltr;
-}
+.tags-fa { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: flex-start; flex: 1; }
+.tags-en { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: flex-end; flex: 1; direction: ltr; }
 .tag-link {
     background-color: var(--bg-body); color: var(--text-secondary); padding: 0.35rem 0.8rem;
     border-radius: 8px; font-size: 0.85rem; font-weight: 500; border: 1px solid var(--border-subtle);
@@ -274,30 +350,42 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 }
 .tag-link:hover { color: var(--clr-ochre); border-color: var(--clr-ochre); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-/* Mobile adjustments for tags */
-@media (max-width: 768px) {
-    .story-tags-section { flex-direction: column; gap: 1.5rem; }
-    .tags-en { justify-content: flex-start; } /* Aligns English tags to left on mobile */
-}
-
 /* ==========================================================================
    Footer
    ========================================================================== */
 .main-footer {
     width: 100%; flex-shrink: 0; background-color: #0F0F11; 
-    border-top: 2px solid var(--clr-ochre); padding: 3rem 0; margin-top: auto; 
+    border-top: 2px solid var(--clr-ochre); padding: 3rem 0 1.5rem 0; margin-top: auto; 
 }
-.footer-content { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+
+.footer-top {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1); padding-bottom: 2rem; margin-bottom: 1.5rem;
+}
+
+.footer-donate { display: flex; align-items: center; gap: 1.2rem; }
+.donate-qr {
+    display: block; width: 95px; height: 95px; background-color: var(--clr-ochre); 
+    -webkit-mask-size: contain; mask-size: contain; transition: transform var(--transition-fast);
+}
+.donate-qr:hover { transform: scale(1.05); }
+.donate-text { display: flex; flex-direction: column; gap: 0.4rem; text-align: right; }
+.donate-title { color: #FFFFFF; font-size: 1.1rem; font-weight: 800; }
+.donate-subtitle { color: #888888; font-size: 0.85rem; font-weight: 500; }
+
+.footer-socials { display: flex; align-items: center; }
 .footer-actions { display: flex; gap: 1rem; }
 .icon-btn {
-    width: 45px; height: 45px; background-color: rgba(255, 255, 255, 0.05); 
+    width: 48px; height: 48px; background-color: rgba(255, 255, 255, 0.05); 
     border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50%;
     display: flex; justify-content: center; align-items: center; color: #FFFFFF;
     transition: all var(--transition-fast);
 }
-.icon-btn svg { width: 20px; height: 20px; }
-.icon-btn:hover { background-color: var(--clr-ochre); color: #FFF; border-color: var(--clr-ochre); transform: translateY(-3px); }
-.footer-copy { color: #888888; font-size: 0.9rem; }
+.icon-btn svg { width: 22px; height: 22px; }
+.icon-btn:hover { background-color: var(--clr-ochre); color: #FFF; border-color: var(--clr-ochre); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(212, 154, 0, 0.3); }
+
+.footer-bottom { text-align: center; }
+.footer-copy { color: #666666; font-size: 0.9rem; }
 
 /* ==========================================================================
    Back to Top Button
@@ -314,7 +402,7 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .back-to-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
 
 /* ==========================================================================
-   Mobile Responsiveness Breakdown
+   Mobile Responsiveness
    ========================================================================== */
 @media (max-width: 900px) {
     .header-art { height: 30px; }
@@ -322,8 +410,8 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     .branding-title { font-size: 1.8rem; }
     .branding-slogan { font-size: 0.9rem; }
     
-    .primary-nav { padding-bottom: 0; position: relative; }
-    .hamburger-btn { display: flex; justify-content: center; align-items: center; width: 100%; padding: 1rem 0; color: var(--text-primary); }
+    .primary-nav { padding-bottom: 0; position: relative; gap: 1.5rem; }
+    .hamburger-btn { display: flex; justify-content: center; align-items: center; width: auto; padding: 1rem 0; color: var(--text-primary); }
     .hamburger-btn svg { width: 26px; height: 26px; stroke-width: 2; }
     
     .nav-links {
@@ -340,224 +428,20 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 }
 
 @media (max-width: 768px) {
-    /* Mobile adjustments for story reading layout */
     .story-article { padding: 2rem 1.5rem; border-radius: 12px; }
     .story-header { flex-direction: column-reverse; align-items: flex-start; gap: 1.5rem; }
     .story-author-image { margin-right: 0; }
     .story-title { font-size: 1.8rem; }
     .story-body { font-size: 1.05rem; }
     .story-body p + p { text-indent: 1.5rem; }
-}
-
-/* ==========================================================================
-   Category Group Headers (Used in Homepage & Tags)
-   ========================================================================== */
-.category-group {
-    width: 100%;
-    margin-bottom: 3rem;
-}
-
-.category-group-header {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px dashed var(--border-subtle);
-    color: var(--text-primary);
-}
-
-.category-group-header svg {
-    width: 30px;
-    height: 30px;
-    stroke-width: 2.5;
-}
-
-.category-group-header h4 {
-    font-size: 1.2rem;
-    font-weight: 800;
-}
-
-/* Matching the header colors to the brand nav colors */
-.cat-flashfictions { color: var(--clr-red); }
-.cat-novels { color: var(--clr-blue); }
-.cat-shortstories { color: var(--clr-pink); }
-.cat-articles { color: var(--clr-ochre); }
-/* ==========================================================================
-   Footer Blocks & Donate QR
-   ========================================================================== */
-.main-footer {
-    width: 100%; 
-    flex-shrink: 0; 
-    background-color: #0F0F11; /* Deep dark background */
-    border-top: 2px solid var(--clr-ochre); 
-    padding: 3rem 0 1.5rem 0; 
-    margin-top: auto; 
-}
-
-/* Top row of the footer (Left/Right separator) */
-.footer-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.1); /* Subtle dashed separator */
-    padding-bottom: 2rem;
-    margin-bottom: 1.5rem;
-}
-
-/* --- Donate Section (Right) --- */
-.footer-donate {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-}
-
-.donate-qr {
-    display: block; /* Fixes rendering/disappearing mask bug */
-    width: 95px; /* Scaled up for better readability */
-    height: 95px;
-    background-color: var(--clr-ochre); 
-    -webkit-mask-size: contain;
-    mask-size: contain;
-    transition: transform var(--transition-fast);
-}
-
-.donate-qr:hover {
-    transform: scale(1.05); /* Slight scale up on hover */
-}
-
-.donate-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    text-align: right;
-}
-
-.donate-title {
-    color: #FFFFFF;
-    font-size: 1.1rem;
-    font-weight: 800;
-}
-
-.donate-subtitle {
-    color: #888888;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-/* --- Social Media Section (Left) --- */
-.footer-socials {
-    display: flex;
-    align-items: center;
-}
-
-.footer-actions { 
-    display: flex; 
-    gap: 1rem; 
-}
-
-.icon-btn {
-    width: 48px; /* Slightly larger buttons */
-    height: 48px;
-    background-color: rgba(255, 255, 255, 0.05); 
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
-    color: #FFFFFF;
-    transition: all var(--transition-fast);
-}
-
-.icon-btn svg { width: 22px; height: 22px; }
-
-.icon-btn:hover { 
-    background-color: var(--clr-ochre); 
-    color: #FFF;
-    border-color: var(--clr-ochre);
-    transform: translateY(-3px); 
-    box-shadow: 0 5px 15px rgba(212, 154, 0, 0.3); /* Soft glow on hover */
-}
-
-/* --- Bottom Section (Copyright) --- */
-.footer-bottom {
-    text-align: center;
-}
-
-.footer-copy { 
-    color: #666666; 
-    font-size: 0.9rem; 
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-    .footer-top {
-        flex-direction: column;
-        gap: 2.5rem;
-        text-align: center;
-    }
-    .footer-donate {
-        flex-direction: column;
-        text-align: center;
-    }
-    .donate-text {
-        text-align: center;
-    }
-}
-/* ==========================================================================
-   Search Modal & Overlay
-   ========================================================================== */
-.search-btn {
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text-primary); margin-left: 1rem; cursor: pointer; transition: color var(--transition-fast);
-}
-.search-btn svg { width: 22px; height: 22px; }
-.search-btn:hover { color: var(--clr-ochre); }
-
-.search-overlay {
-    position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(5px); z-index: 9999; display: flex; justify-content: center;
-    align-items: flex-start; padding-top: 10vh; opacity: 0; visibility: hidden;
-    transition: all var(--transition-standard);
-}
-.search-overlay.active { opacity: 1; visibility: visible; }
-
-.search-modal {
-    width: 100%; max-width: 650px; background-color: var(--bg-surface);
-    border-radius: 16px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-    overflow: hidden; transform: translateY(-20px); transition: transform var(--transition-standard);
-}
-.search-overlay.active .search-modal { transform: translateY(0); }
-
-.search-header {
-    display: flex; align-items: center; border-bottom: 1px solid var(--border-subtle); padding: 1rem 1.5rem;
-}
-#search-input {
-    flex-grow: 1; border: none; background: transparent; font-family: inherit;
-    font-size: 1.1rem; color: var(--text-primary); outline: none; padding: 0.5rem;
-}
-#search-input::placeholder { color: var(--text-secondary); opacity: 0.7; }
-
-#close-search-btn {
-    color: var(--text-secondary); display: flex; transition: color var(--transition-fast);
-}
-#close-search-btn svg { width: 24px; height: 24px; }
-#close-search-btn:hover { color: var(--clr-red); }
-
-.search-results-container {
-    max-height: 50vh; overflow-y: auto; padding: 1rem 0;
-}
-#search-results-list { list-style: none; margin: 0; padding: 0; }
-#search-results-list li a {
-    display: flex; flex-direction: column; padding: 0.8rem 1.5rem; transition: background-color var(--transition-fast);
-}
-#search-results-list li a:hover { background-color: rgba(212, 154, 0, 0.05); border-right: 3px solid var(--clr-ochre); }
-.sr-title { font-weight: 700; color: var(--text-primary); font-size: 1.05rem; }
-.sr-meta { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem; }
-.sr-empty { padding: 1.5rem; text-align: center; color: var(--text-secondary); }
-
-@media (max-width: 768px) {
-    .search-overlay { padding-top: 0; }
-    .search-modal { max-width: 100%; border-radius: 0; height: 100vh; display: flex; flex-direction: column; }
-    .search-results-container { max-height: none; flex-grow: 1; }
+    
+    .story-tags-section { flex-direction: column; gap: 1.5rem; }
+    .tags-en { justify-content: flex-start; }
+    
+    .footer-top { flex-direction: column; gap: 2.5rem; text-align: center; }
+    .footer-donate { flex-direction: column; text-align: center; }
+    .donate-text { text-align: center; }
+    
+    /* Search box mobile fix */
+    .inline-search-container { padding: 0 1rem; }
 }
