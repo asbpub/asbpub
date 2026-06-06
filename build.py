@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, List, Any
 
 # --- Configuration Constants ---
-SITE_URL = 'https://asbpub.vercel.app'
+SITE_URL = 'https://www.asbpub.ir'
 
 CATEGORY_TITLES: Dict[str, str] = {
     'flashfictions': 'داستان برق‌آسا',
