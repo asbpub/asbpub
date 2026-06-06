@@ -386,41 +386,121 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 /* ==========================================================================
    Footer Blocks & Donate QR
    ========================================================================== */
-.footer-blocks {
-    display: flex;
-    align-items: center;
-    gap: 2.5rem;
+.main-footer {
+    width: 100%; 
+    flex-shrink: 0; 
+    background-color: #0F0F11; /* Deep dark background */
+    border-top: 2px solid var(--clr-ochre); 
+    padding: 3rem 0 1.5rem 0; 
+    margin-top: auto; 
 }
 
-.donate-wrapper {
+/* Top row of the footer (Left/Right separator) */
+.footer-top {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.8rem;
-    border-right: 1px dashed var(--border-subtle);
-    padding-right: 2.5rem;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1); /* Subtle dashed separator */
+    padding-bottom: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+/* --- Donate Section (Right) --- */
+.footer-donate {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
 }
 
 .donate-qr {
-    width: 75px;
-    height: 75px;
-    background-color: var(--clr-ochre)
+    display: block; /* Fixes rendering/disappearing mask bug */
+    width: 95px; /* Scaled up for better readability */
+    height: 95px;
+    background-color: var(--clr-ochre); 
+    -webkit-mask-size: contain;
+    mask-size: contain;
     transition: transform var(--transition-fast);
 }
 
-.donate-wrapper:hover .donate-qr {
-    transform: scale(1.05);
-    background-color: #B8860B;
+.donate-qr:hover {
+    transform: scale(1.05); /* Slight scale up on hover */
 }
 
-.donate-label {
+.donate-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    text-align: right;
+}
+
+.donate-title {
+    color: #FFFFFF;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.donate-subtitle {
+    color: #888888;
     font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-weight: 600;
+    font-weight: 500;
 }
 
-/* Mobile adjustments for footer & donate */
-@media (max-width: 600px) {
-    .footer-blocks { flex-direction: column-reverse; gap: 1.5rem; }
-    .donate-wrapper { border-right: none; border-bottom: 1px dashed var(--border-subtle); padding-right: 0; padding-bottom: 1.5rem; }
+/* --- Social Media Section (Left) --- */
+.footer-socials {
+    display: flex;
+    align-items: center;
+}
+
+.footer-actions { 
+    display: flex; 
+    gap: 1rem; 
+}
+
+.icon-btn {
+    width: 48px; /* Slightly larger buttons */
+    height: 48px;
+    background-color: rgba(255, 255, 255, 0.05); 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    color: #FFFFFF;
+    transition: all var(--transition-fast);
+}
+
+.icon-btn svg { width: 22px; height: 22px; }
+
+.icon-btn:hover { 
+    background-color: var(--clr-ochre); 
+    color: #FFF;
+    border-color: var(--clr-ochre);
+    transform: translateY(-3px); 
+    box-shadow: 0 5px 15px rgba(212, 154, 0, 0.3); /* Soft glow on hover */
+}
+
+/* --- Bottom Section (Copyright) --- */
+.footer-bottom {
+    text-align: center;
+}
+
+.footer-copy { 
+    color: #666666; 
+    font-size: 0.9rem; 
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .footer-top {
+        flex-direction: column;
+        gap: 2.5rem;
+        text-align: center;
+    }
+    .footer-donate {
+        flex-direction: column;
+        text-align: center;
+    }
+    .donate-text {
+        text-align: center;
+    }
 }
