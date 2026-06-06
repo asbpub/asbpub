@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ==========================================================================
     // 1. Mobile Menu Controller
-    // ==========================================================================
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const navLinksMenu = document.getElementById('nav-links-menu');
 
@@ -13,9 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ==========================================================================
-    // 2. Smart Header & Back-To-Top Scroll Effects
-    // ==========================================================================
+    // 2. Smart Header & Back-To-Top
     const header = document.getElementById('main-header');
     const backToTopBtn = document.getElementById('back-to-top');
     let lastScrollY = window.scrollY;
@@ -56,21 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ==========================================================================
-    // 3. Smart Search System (Lazy Loaded)
-    // ==========================================================================
-    const searchTriggerBtn = document.getElementById('search-trigger-btn');
-    const searchOverlay = document.getElementById('search-overlay');
-    const closeSearchBtn = document.getElementById('close-search-btn');
-    const searchInput = document.getElementById('search-input');
+    // 3. Inline Smart Search System
+    const searchInput = document.getElementById('inline-search-input');
+    const searchDropdown = document.getElementById('search-dropdown');
     const searchResultsList = document.getElementById('search-results-list');
     
-    let searchIndex = null; // Holds the JSON data
+    let searchIndex = null; 
     const basePath = window.ASB_BASE_PATH || '';
 
-    // Function to fetch the search index JSON (Lazy Load)
     const loadSearchData = async () => {
-        if (searchIndex !== null) return; // Already loaded
+        if (searchIndex !== null) return; 
         try {
             const response = await fetch(basePath + 'search.json');
             searchIndex = await response.json();
@@ -80,42 +71,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Open Search Modal
-    if (searchTriggerBtn && searchOverlay) {
-        searchTriggerBtn.addEventListener('click', () => {
-            searchOverlay.classList.add('active');
-            searchInput.focus();
-            loadSearchData(); // Fetch JSON only when opened
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    if (searchInput && searchDropdown) {
+        // Fetch JSON when user clicks the search box
+        searchInput.addEventListener('focus', () => {
+            loadSearchData();
+            if (searchInput.value.trim() !== '') {
+                searchDropdown.classList.add('active');
+            }
         });
-    }
 
-    // Close Search Modal
-    const closeSearch = () => {
-        searchOverlay.classList.remove('active');
-        searchInput.value = '';
-        searchResultsList.innerHTML = '';
-        document.body.style.overflow = ''; // Restore background scrolling
-    };
-
-    if (closeSearchBtn) closeSearchBtn.addEventListener('click', closeSearch);
-
-    // Close on clicking outside the modal box
-    if (searchOverlay) {
-        searchOverlay.addEventListener('click', (e) => {
-            if (e.target === searchOverlay) closeSearch();
-        });
-    }
-
-    // Live Search Logic
-    if (searchInput) {
+        // Live Search Logic
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.trim().toLowerCase();
             searchResultsList.innerHTML = '';
 
-            if (query === '' || !searchIndex) return;
+            if (query === '') {
+                searchDropdown.classList.remove('active');
+                return;
+            }
 
-            // Filter the index based on query matching title, author, category, or tags
+            searchDropdown.classList.add('active');
+
+            if (!searchIndex) return;
+
             const results = searchIndex.filter(post => {
                 const matchTitle = post.title.toLowerCase().includes(query);
                 const matchAuthor = post.author.toLowerCase().includes(query);
@@ -124,12 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return matchTitle || matchAuthor || matchCategory || matchTags;
             });
 
-            // Render Results
             if (results.length > 0) {
                 results.forEach(post => {
                     const li = document.createElement('li');
                     li.innerHTML = `
-                        <a href="${basePath}${post.url}" onclick="document.body.style.overflow='';">
+                        <a href="${basePath}${post.url}">
                             <span class="sr-title">${post.title}</span>
                             <span class="sr-meta">${post.author} &bull; ${post.category}</span>
                         </a>
@@ -140,6 +117,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchResultsList.innerHTML = '<li class="sr-empty">متأسفانه نتیجه‌ای یافت نشد.</li>';
             }
         });
-    }
 
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+                searchDropdown.classList.remove('active');
+            }
+        });
+    }
 });
