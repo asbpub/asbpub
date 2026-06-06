@@ -383,3 +383,44 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .cat-novels { color: var(--clr-blue); }
 .cat-shortstories { color: var(--clr-pink); }
 .cat-articles { color: var(--clr-ochre); }
+/* ==========================================================================
+   Footer Blocks & Donate QR
+   ========================================================================== */
+.footer-blocks {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.donate-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    border-right: 1px dashed var(--border-subtle);
+    padding-right: 2.5rem;
+}
+
+.donate-qr {
+    width: 75px;
+    height: 75px;
+    background-color: var(--clr-ochre)
+    transition: transform var(--transition-fast);
+}
+
+.donate-wrapper:hover .donate-qr {
+    transform: scale(1.05);
+    background-color: #B8860B;
+}
+
+.donate-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* Mobile adjustments for footer & donate */
+@media (max-width: 600px) {
+    .footer-blocks { flex-direction: column-reverse; gap: 1.5rem; }
+    .donate-wrapper { border-right: none; border-bottom: 1px dashed var(--border-subtle); padding-right: 0; padding-bottom: 1.5rem; }
+}
