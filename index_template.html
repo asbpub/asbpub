@@ -147,14 +147,25 @@
     </main>
 
     <footer class="main-footer">
-        <div class="container footer-content">
-            <div class="footer-actions">
-                <a href="mailto:asbpub@atomicmail.io" class="icon-btn" aria-label="ارسال ایمیل به نشر اسب">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                </a>
-                <a href="https://t.me/asbpub" target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="ورود به کانال تلگرام نشر اسب">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                </a>
+        <div class="container footer-content"><!-- Footer Blocks: Socials & Donate -->
+            <div class="footer-blocks">
+                
+                <!-- Social Actions -->
+                <div class="footer-actions">
+                    <a href="mailto:asbpub@atomicmail.io" class="icon-btn" aria-label="ارسال ایمیل به نشر اسب">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </a>
+                    <a href="https://t.me/asbpub" target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="ورود به کانال تلگرام نشر اسب">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </a>
+                </div>
+
+                <!-- Donate QR Section -->
+                <div class="donate-wrapper">
+                    <div class="donate-qr" style="-webkit-mask: url('{{ base_path }}donate/donate.svg') no-repeat center / contain; mask: url('{{ base_path }}donate/donate.svg') no-repeat center / contain;"></div>
+                    <span class="donate-label">رمزینه‌ی حمایت از ما</span>
+                </div>
+
             </div>
             <small class="footer-copy">© ۱۴۰۵، تمام حقوق برای نشر اسب محفوظ است.</small>
         </div>
