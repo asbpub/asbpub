@@ -10,7 +10,7 @@ from typing import Dict, List, Any
 
 # --- Configuration Constants ---
 CATEGORY_TITLES: Dict[str, str] = {
-    'flashfictions': 'داستان‌های برق‌آسا',
+    'flashfictions': 'داستان برق‌آسا',
     'shortstories': 'داستان کوتاه',
     'novels': 'رمان',
     'articles': 'جستار',
