@@ -160,10 +160,11 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
    ========================================================================== */
 .inline-search-container {
     width: 100%;
-    max-width: 600px;
-    margin: 2.5rem auto;
+    max-width: 450px;
+    margin: 1.5rem auto 0 auto;
     position: relative;
     z-index: 50;
+    padding: 0 1rem;
 }
 
 .search-input-wrapper {
@@ -171,25 +172,25 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     align-items: center;
     background-color: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-radius: 30px;
-    padding: 0.6rem 1.5rem;
-    opacity: 0.6; /* Faded state initially */
+    border-radius: 25px;
+    padding: 0.4rem 1.2rem;
+    opacity: 0.6; 
     transition: all var(--transition-standard);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .search-input-wrapper:focus-within {
-    opacity: 1; /* Fully visible on focus */
+    opacity: 1; 
     border-color: var(--clr-ochre);
-    box-shadow: 0 8px 25px rgba(212, 154, 0, 0.1);
-    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(212, 154, 0, 0.1);
+    transform: translateY(-1px);
 }
 
 .search-icon {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     color: var(--text-secondary);
-    margin-left: 10px;
+    margin-left: 8px; 
 }
 
 .search-input-wrapper:focus-within .search-icon {
@@ -201,24 +202,29 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     border: none;
     background: transparent;
     font-family: inherit;
-    font-size: 1.05rem;
+    font-size: 0.9rem;
     color: var(--text-primary);
     outline: none;
-    padding: 0.3rem 0;
+    padding: 0.2rem 0;
+    width: 100%;
 }
 
-#inline-search-input::placeholder { color: var(--text-secondary); opacity: 0.7; }
+#inline-search-input::placeholder { 
+    color: var(--text-secondary); 
+    opacity: 0.7; 
+    font-size: 0.85rem;
+}
 
 .search-dropdown {
     position: absolute;
     top: 110%;
-    left: 0;
-    right: 0;
+    left: 1rem;
+    right: 1rem;
     background-color: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-    max-height: 400px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    max-height: 350px;
     overflow-y: auto;
     display: none;
     text-align: right;
@@ -226,17 +232,38 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 
 .search-dropdown.active {
     display: block;
-    animation: fadeUp 0.3s ease forwards;
+    animation: fadeUp 0.2s ease forwards;
 }
 
 #search-results-list { list-style: none; margin: 0; padding: 0.5rem 0; }
 #search-results-list li a {
-    display: flex; flex-direction: column; padding: 0.8rem 1.5rem; transition: background-color var(--transition-fast);
+    display: flex; flex-direction: column; padding: 0.6rem 1.2rem; transition: background-color var(--transition-fast);
 }
 #search-results-list li a:hover { background-color: rgba(212, 154, 0, 0.05); border-right: 3px solid var(--clr-ochre); }
-.sr-title { font-weight: 700; color: var(--text-primary); font-size: 1.05rem; }
-.sr-meta { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem; }
-.sr-empty { padding: 1.5rem; text-align: center; color: var(--text-secondary); font-size: 0.95rem;}
+.sr-title { font-weight: 700; color: var(--text-primary); font-size: 0.95rem; }
+.sr-meta { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem; }
+.sr-empty { padding: 1rem; text-align: center; color: var(--text-secondary); font-size: 0.85rem;}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .inline-search-container {
+        max-width: 90%;
+        margin: 1rem auto 0 auto;
+    }
+    .search-input-wrapper {
+        padding: 0.3rem 0.8rem;
+    }
+    #inline-search-input {
+        font-size: 0.85rem;
+    }
+    #inline-search-input::placeholder {
+        font-size: 0.75rem;
+    }
+    .search-icon {
+        width: 14px;
+        height: 14px;
+    }
+}
 
 /* ==========================================================================
    Category Headers & Grids
