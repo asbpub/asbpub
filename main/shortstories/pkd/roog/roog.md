@@ -4,7 +4,7 @@ author: فیلیپ کی. دیک
 translator: امیرمحمد شیرازیان
 category: shortstories
 date: ۱۴۰۵/۰۳/۱۸
-cover	../pkd.jpg
+cover:	../pkd.jpg
 tags: [Philip K. Dick, Roog, فیلیپ کی. دیک, امیرمحمد شیرازیان, داستان کوتاه, علمی‌تخیلی]
 ---
 
