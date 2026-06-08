@@ -3,7 +3,8 @@ title: روگ
 author: فیلیپ کی. دیک
 translator: امیرمحمد شیرازیان
 category: shortstories
-date: ۱۴۰۵/۰۳/۱8
+date: ۱۴۰۵/۰۳/۱۸
+cover	../pkd.jpg
 tags: [Philip K. Dick, Roog, فیلیپ کی. دیک, امیرمحمد شیرازیان, داستان کوتاه, علمی‌تخیلی]
 ---
 
