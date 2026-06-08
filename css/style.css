@@ -340,18 +340,15 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 /* --------------------------------------------------------------------------
    Markdown Editor Modifiers (No-indent, Drop-cap, Center, Scene Break)
    -------------------------------------------------------------------------- */
-.story-body p.no-indent { text-indent: 0 !important; }
-.story-body p.text-center { text-align: center !important; text-indent: 0 !important; }
+.story-body .no-indent { text-indent: 0 !important; }
+.story-body .text-center { text-align: center !important; text-indent: 0 !important; }
 
-.story-body p.scene-break {
-    text-align: center !important;
-    text-indent: 0 !important;
-    margin: 3.5rem 0;
-    font-size: 0;
-    color: transparent;
-    line-height: 0;
+.story-body .scene-break {
+    display: block;
+    margin: 3.5rem auto;
     height: 32px;
-    background-image: url('../asbbreak.png');
+    width: 100%;
+    background-image: url('../asbbreak.png'); 
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
