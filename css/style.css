@@ -428,7 +428,6 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .donate-title { color: #FFFFFF; font-size: 1.1rem; font-weight: 800; }
 .donate-subtitle { color: #888888; font-size: 0.85rem; font-weight: 500; }
 
-/* ساختار جدید برای ستون شبکه‌های اجتماعی و هم‌کاری */
 .footer-socials { display: flex; align-items: flex-start; }
 .footer-actions { display: flex; flex-direction: column; gap: 1.2rem; align-items: flex-start; }
 
@@ -450,7 +449,6 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 }
 .icon-btn svg { width: 22px; height: 22px; }
 
-/* افکت هاور از متن به آیکون منتقل می‌شود */
 .social-link:hover .icon-btn { 
     background-color: var(--clr-ochre); color: #FFF; border-color: var(--clr-ochre); 
     transform: translateY(-3px); box-shadow: 0 5px 15px rgba(212, 154, 0, 0.3); 
@@ -514,7 +512,6 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     .footer-donate { flex-direction: column; text-align: center; }
     .donate-text { text-align: center; }
     
-    /* چینش جدید فوتر برای گوشی */
     .footer-socials { justify-content: center; width: 100%; }
     .footer-actions { align-items: center; width: 100%; }
     .social-link { width: auto; justify-content: flex-start; }
