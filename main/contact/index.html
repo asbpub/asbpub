@@ -31,11 +31,9 @@
         .submit-btn { width: auto; padding: 0.85rem 2.5rem; background-color: var(--clr-ochre); color: #FFFFFF; font-weight: 700; font-size: 1rem; border-radius: 8px; transition: all var(--transition-fast); cursor: pointer; border: none; font-family: inherit; text-align: center; display: inline-block; }
         .submit-btn:hover { background-color: #B8860B; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(212, 154, 0, 0.2); }
         
-        .contact-options { display: flex; flex-direction: column; gap: 3rem; }
-        .telegram-option { text-align: center; padding: 2.5rem 1.5rem; background: var(--bg-body); border-radius: 12px; border: 1px dashed var(--border-subtle); }
-        .telegram-option h3 { margin-bottom: 0.8rem; font-weight: 800; font-size: 1.3rem; color: var(--text-primary); }
-        .telegram-option p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.8; }
-        .email-option h3 { margin-bottom: 1.5rem; font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); }
+        .contact-options { display: flex; flex-direction: column; gap: 3.5rem; }
+        .contact-section-title { margin-bottom: 1.5rem; font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); }
+        .contact-text { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.8; text-align: right; }
     </style>
 
     <!-- Vercel Web Analytics -->
@@ -146,19 +144,17 @@
                         
                         <!-- Telegram Fast Contact Option -->
                         <div class="telegram-option">
-                            <div style="margin-bottom: 1.5rem;">
-                                <div class="icon-btn" style="margin: 0 auto; width: 60px; height: 60px; background-color: rgba(212, 154, 0, 0.1); border: 1px solid var(--clr-ochre); color: var(--clr-ochre);">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
-                                </div>
-                            </div>
-                            <h3>پاسخ‌گویی سریع در تلگرام</h3>
-                            <p>برای ارتباط مستقیم و دریافت پاسخ سریع‌تر، مستقیماً به تلگرام نشر اسب پیام بدهید.</p>
-                            <a href="https://t.me/asbpubcontact" target="_blank" rel="noopener noreferrer" class="submit-btn">ارسال پیام</a>
+                            <h3 class="contact-section-title">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--clr-ochre)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+                                پاسخ‌گویی سریع در تلگرام
+                            </h3>
+                            <p class="contact-text">برای ارتباط مستقیم و دریافت پاسخ سریع‌تر، مستقیماً به تلگرام نشر اسب پیام بدهید.</p>
+                            <a href="https://t.me/asbpubcontact" target="_blank" rel="noopener noreferrer" class="submit-btn" style="width: 100%; display: block; box-sizing: border-box;">ارسال پیام</a>
                         </div>
 
                         <!-- Standard Email Form Option -->
                         <div class="email-option">
-                            <h3>
+                            <h3 class="contact-section-title">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--clr-ochre)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
                                 ارسال ای‌میل
                             </h3>
