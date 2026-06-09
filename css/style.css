@@ -415,21 +415,7 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 
 .footer-top {
     display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.1); 
-    padding-bottom: 2rem; 
-    
-    /* FIX: Enforcing container limits directly on the footer to fix SSG templates */
-    max-width: 1100px;
-    width: 100%;
-    margin: 0 auto 1.5rem auto; 
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-}
-
-/* FIX: Prevent double-padding if a .container div already exists in manual pages */
-.container .footer-top {
-    padding-left: 0;
-    padding-right: 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1); padding-bottom: 2rem; margin-bottom: 1.5rem;
 }
 
 .footer-donate { display: flex; align-items: center; gap: 1.2rem; }
@@ -442,7 +428,7 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .donate-title { color: #FFFFFF; font-size: 1.1rem; font-weight: 800; }
 .donate-subtitle { color: #888888; font-size: 0.85rem; font-weight: 500; }
 
-.footer-socials { display: flex; align-items: flex-start; margin-right: auto; }
+.footer-socials { display: flex; align-items: flex-start; }
 .footer-actions { display: flex; flex-direction: column; gap: 1.2rem; align-items: flex-start; }
 
 .social-link {
@@ -455,36 +441,22 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .social-link:hover { color: var(--clr-ochre); }
 
 .icon-btn {
-    width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.05); 
+    width: 48px; height: 48px; background-color: rgba(255, 255, 255, 0.05); 
     border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50%;
     display: flex; justify-content: center; align-items: center; color: #FFFFFF;
     transition: all var(--transition-fast);
     flex-shrink: 0;
 }
-.icon-btn svg { width: 18px; height: 18px; }
+.icon-btn svg { width: 22px; height: 22px; }
 
 .social-link:hover .icon-btn { 
     background-color: var(--clr-ochre); color: #FFF; border-color: var(--clr-ochre); 
     transform: translateY(-3px); box-shadow: 0 5px 15px rgba(212, 154, 0, 0.3); 
 }
 
-.footer-bottom { 
-    text-align: center; 
-    
-    /* FIX: Centering and limiting the copyright text width */
-    max-width: 1100px;
-    width: 100%;
-    margin: 0 auto;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-}
-
-/* FIX: Prevent double-padding for copyright text */
-.container .footer-bottom {
-    padding-left: 0;
-    padding-right: 0;
-}
+.footer-bottom { text-align: center; }
 .footer-copy { color: #666666; font-size: 0.9rem; }
+
 /* ==========================================================================
    Back to Top Button
    ========================================================================== */
@@ -543,6 +515,9 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     .footer-socials { display: flex; justify-content: center; width: 100%; margin-right: 0; }
     .footer-actions { align-items: flex-start; width: auto; }
     .social-link { width: auto; justify-content: flex-start; font-size: 0.9rem; }
+    
+    .icon-btn { width: 40px; height: 40px; }
+    .icon-btn svg { width: 18px; height: 18px; }
     
     /* Search box mobile fix */
     .inline-search-container { padding: 0 1rem; }
