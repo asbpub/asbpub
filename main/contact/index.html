@@ -6,14 +6,19 @@
     <meta name="description" content="ارتباط با نشر اسب.">
     <title>ارتباط با ما | نشر اسب</title>
     
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="hHlYCoOa9y4FMyctEhX-zXD5T6JLBfEiVXu-eVFrKq0" />
+    
+    <!-- Favicon & Web App Icons -->
     <link rel="icon" type="image/png" href="../../asbfavicon.png">
     <link rel="apple-touch-icon" href="../../asbfavicon.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/style.css">
     
+    <link rel="stylesheet" href="../../css/style.css">
+
     <!-- Vercel Web Analytics -->
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -26,8 +31,22 @@
       injectSpeedInsights();
     </script>
 
+    <!-- Open Graph / Telegram & Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.asbpub.ir/">
+    <meta property="og:title" content="ارتباط با ما | نشر اسب">
+    <meta property="og:description" content="ارتباط با نشر اسب.">
+    <meta property="og:image" content="https://www.asbpub.ir/asbsocial.png">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="ارتباط با ما | نشر اسب">
+    <meta name="twitter:description" content="ارتباط با نشر اسب.">
+    <meta name="twitter:image" content="https://www.asbpub.ir/asbsocial.png">
+    
     <style>
-        .form-section { padding: 4rem 0; display: flex; justify-content: center; }
+        /* Form & Contact Styles */
+        .form-section { padding: 3rem 0 5rem 0; display: flex; justify-content: center; }
         .form-wrapper { width: 100%; max-width: 650px; background: var(--bg-surface); padding: 3rem; border-radius: 16px; border: 1px solid var(--border-subtle); box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
         .form-group { margin-bottom: 1.5rem; text-align: right; }
         .form-group label { display: block; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); font-size: 0.95rem; }
@@ -115,7 +134,19 @@
         </nav>
     </header>
 
-    <main class="page-content">
+    <main class="page-content" id="main-content">
+        
+        <!-- Inline Smart Search -->
+        <div class="inline-search-container">
+            <div class="search-input-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="inline-search-input" placeholder="جست‌وجو در نام داستان، نویسنده، ژانر…" autocomplete="off">
+            </div>
+            <div id="search-dropdown" class="search-dropdown">
+                <ul id="search-results-list"></ul>
+            </div>
+        </div>
+
         <section class="form-section">
             <div class="container" style="display:flex; justify-content:center;">
                 <div class="form-wrapper">
@@ -167,11 +198,14 @@
                 </div>
             </div>
         </section>
+
     </main>
 
     <footer class="main-footer">
         <div class="container">
             <div class="footer-top">
+                
+                <!-- Right Section: Donate & QR Code (Clickable) -->
                 <a href="https://daramet.com/asbpub" target="_blank" rel="noopener noreferrer" class="footer-donate">
                     <div class="donate-qr" style="-webkit-mask: url('../../donate/donate.svg') no-repeat center / contain; mask: url('../../donate/donate.svg') no-repeat center / contain;"></div>
                     <div class="donate-text">
@@ -180,33 +214,36 @@
                     </div>
                 </a>
 
+                <!-- Left Section: Social & Contact Actions -->
                 <div class="footer-socials">
                     <div class="footer-actions">
                         <a href="https://t.me/asbpub" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="ورود به کانال تلگرام نشر اسب">
                             <div class="icon-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-icon lucide-send"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
                             </div>
                             <span>کانال تلگرام ما</span>
                         </a>
-                        <a href="../contact/index.html" class="social-link" aria-label="ارتباط با نشر اسب">
+                        
+                        <a href="index.html" class="social-link" aria-label="ارتباط با نشر اسب">
                             <div class="icon-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail-icon lucide-mail"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
                             </div>
                             <span>ارتباط با ما</span>
                         </a>
+
                         <a href="../collab/index.html" class="social-link" aria-label="درخواست هم‌کاری و ارسال اثر">
                             <div class="icon-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-handshake-icon lucide-handshake"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>
                             </div>
                             <span>هم‌کاری با ما</span>
                         </a>
                     </div>
                 </div>
+
             </div>
+
+            <!-- Bottom Section: Copyright -->
             <div class="footer-bottom">
-                <div style="margin-bottom: 0.8rem;">
-                    <a href="../collab/index.html" style="color: var(--text-secondary); font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: color var(--transition-fast);" onmouseover="this.style.color='#D49A00'" onmouseout="this.style.color='var(--text-secondary)'">درخواست هم‌کاری و ارسال اثر</a>
-                </div>
                 <small class="footer-copy">© ۱۴۰۵، تمام حقوق برای نشر اسب محفوظ است.</small>
             </div>
         </div>
@@ -216,6 +253,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
     </button>
 
+    <!-- Pass base path to JS for resolving JSON route -->
     <script>window.ASB_BASE_PATH = "../../";</script>
     <script src="../../js/main.js"></script>
 
