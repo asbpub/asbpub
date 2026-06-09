@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ارتباط با نشر اسب.">
+    <title>ارتباط با ما | نشر اسب</title>
+    <link rel="icon" type="image/png" href="../../asbfavicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .form-section { padding: 4rem 0; display: flex; justify-content: center; }
+        .form-wrapper { width: 100%; max-width: 600px; background: var(--bg-surface); padding: 3rem; border-radius: 16px; border: 1px solid var(--border-subtle); box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        .form-group { margin-bottom: 1.5rem; text-align: right; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); font-size: 0.95rem; }
+        .form-control { width: 100%; padding: 0.75rem 1rem; font-family: var(--font-primary); font-size: 0.9rem; border: 1px solid var(--border-subtle); border-radius: 8px; background-color: var(--bg-body); color: var(--text-primary); outline: none; transition: all var(--transition-fast); }
+        .form-control:focus { border-color: var(--clr-ochre); background-color: var(--bg-surface); box-shadow: 0 0 0 3px rgba(212, 154, 0, 0.1); }
+        textarea.form-control { resize: vertical; min-height: 150px; }
+        .submit-btn { width: 100%; padding: 0.85rem; background-color: var(--clr-ochre); color: #FFFFFF; font-weight: 700; font-size: 1rem; border-radius: 8px; transition: all var(--transition-fast); margin-top: 1rem; }
+        .submit-btn:hover { background-color: #B8860B; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(212, 154, 0, 0.2); }
+    </style>
+</head>
+<body>
+
+    <header id="main-header" class="smart-header">
+        <div class="header-art" aria-hidden="true">
+            <svg viewBox="0 0 1000 100" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                <line x1="0" y1="98" x2="1000" y2="98" stroke="#1a1a1a" stroke-width="4"/>
+                <path d="M 100 98 L 250 30 L 400 98 Z" fill="#34AAE1" opacity="0.9"/>
+                <path d="M 280 98 L 380 45 L 480 98 Z" fill="#D94848" opacity="0.9"/>
+                <path d="M 420 98 L 580 15 L 740 98 Z" fill="#D49A00" opacity="0.9"/>
+            </svg>
+        </div>
+        <div class="branding-container">
+            <div class="branding">
+                <a href="../../index.html" style="display:flex; align-items:center; gap:1.2rem;">
+                    <img src="../../asblogo.png" alt="لوگوی نشر اسب" class="branding-logo" width="100" height="100">
+                    <div class="branding-text">
+                        <h1 class="branding-title">نشر اسب</h1>
+                        <div class="slogan-wrapper"><span class="branding-slogan">سر در پی افق‌ها</span></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <nav class="primary-nav">
+            <div class="nav-links">
+                <a href="../../index.html" class="nav-item"><span class="nav-label">خانه</span></a>
+                <a href="../novels/index.html" class="nav-item"><span class="nav-label">رمان</span></a>
+                <a href="../shortstories/index.html" class="nav-item"><span class="nav-label">داستان کوتاه</span></a>
+                <a href="../flashfictions/index.html" class="nav-item"><span class="nav-label">داستان برق‌آسا</span></a>
+                <a href="../articles/index.html" class="nav-item"><span class="nav-label">مجله‌ی اسب</span></a>
+                <a href="../creators/index.html" class="nav-item"><span class="nav-label">پدیدآورندگان</span></a>
+                <a href="../about/index.html" class="nav-item"><span class="nav-label">درباره‌ی ما</span></a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <section class="form-section">
+            <div class="container" style="display:flex; justify-content:center;">
+                <div class="form-wrapper">
+                    <h2 class="section-title" style="margin-bottom: 2.5rem;">ارتباط با ما</h2>
+                    <form action="https://your-worker.workers.dev/contact" method="POST">
+                        <div class="form-group">
+                            <label for="name">نام و نام‌خانوادگی</label>
+                            <input type="text" id="name" name="name" class="form-control" required autocomplete="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">نشانی ای‌میل</label>
+                            <input type="email" id="email" name="email" class="form-control" style="direction: ltr;" required autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">موضوع پیام</label>
+                            <input type="text" id="subject" name="subject" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">متن پیام</label>
+                            <textarea id="message" name="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">ارسال پیام</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-top">
+                <a href="https://daramet.com/asbpub" target="_blank" rel="noopener noreferrer" class="footer-donate">
+                    <div class="donate-qr" style="-webkit-mask: url('../../donate/donate.svg') no-repeat center / contain; mask: url('../../donate/donate.svg') no-repeat center / contain;"></div>
+                    <div class="donate-text">
+                        <span class="donate-title">حمایت از نشر اسب</span>
+                        <span class="donate-subtitle">اسکن کنید یا ضربه بزنید.</span>
+                    </div>
+                </a>
+                <div class="footer-socials">
+                    <div class="footer-actions">
+                        <a href="https://t.me/asbpub" target="_blank" rel="noopener noreferrer" class="social-link">
+                            <div class="icon-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+                            </div>
+                            <span>کانال تلگرام ما</span>
+                        </a>
+                        <a href="../contact/index.html" class="social-link">
+                            <div class="icon-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+                            </div>
+                            <span>ارتباط با ما</span>
+                        </a>
+                        <a href="../collab/index.html" class="social-link">
+                            <div class="icon-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-handshake"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>
+                            </div>
+                            <span>هم‌کاری با ما</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <small class="footer-copy">© ۱۴۰۵، تمام حقوق برای نشر اسب محفوظ است.</small>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
