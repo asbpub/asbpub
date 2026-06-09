@@ -512,9 +512,9 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     .footer-donate { flex-direction: column; text-align: center; }
     .donate-text { text-align: center; }
     
-    .footer-socials { justify-content: center; width: 100%; }
-    .footer-actions { align-items: center; width: 100%; }
-    .social-link { width: auto; justify-content: flex-start; }
+    .footer-socials { display: flex; justify-content: center; width: 100%; }
+    .footer-actions { align-items: flex-start; width: auto; }
+    .social-link { width: 100%; justify-content: flex-start; }
     
     /* Search box mobile fix */
     .inline-search-container { padding: 0 1rem; }
