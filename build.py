@@ -17,7 +17,8 @@ CATEGORY_TITLES: Dict[str, str] = {
     'flashfictions': 'داستان برق‌آسا',
     'shortstories': 'داستان کوتاه',
     'novels': 'رمان',
-    'articles': 'جستار',
+    'articles': 'مجله‌ی اسب',
+    'creators': 'پدیدآورندگان',
     'about': 'درباره‌ی ما'
 }
 
@@ -145,6 +146,8 @@ def build_site() -> None:
             # --- Tagging Logic ---
             for tag in tags:
                 tag_dir = TAGS_DIR / tag
+                tag_dir.mkdir(parents=True, exist_ok=True)
+                
                 tag_dir_abs = tag_dir.resolve()
                 
                 tag_rel_url = os.path.relpath(html_abs, tag_dir_abs).replace('\\', '/')
