@@ -415,7 +415,21 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 
 .footer-top {
     display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.1); padding-bottom: 2rem; margin-bottom: 1.5rem;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1); 
+    padding-bottom: 2rem; 
+    
+    /* FIX: Enforcing container limits directly on the footer to fix SSG templates */
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto 1.5rem auto; 
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+/* FIX: Prevent double-padding if a .container div already exists in manual pages */
+.container .footer-top {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .footer-donate { display: flex; align-items: center; gap: 1.2rem; }
@@ -454,9 +468,23 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     transform: translateY(-3px); box-shadow: 0 5px 15px rgba(212, 154, 0, 0.3); 
 }
 
-.footer-bottom { text-align: center; }
-.footer-copy { color: #666666; font-size: 0.9rem; }
+.footer-bottom { 
+    text-align: center; 
+    
+    /* FIX: Centering and limiting the copyright text width */
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
 
+/* FIX: Prevent double-padding for copyright text */
+.container .footer-bottom {
+    padding-left: 0;
+    padding-right: 0;
+}
+.footer-copy { color: #666666; font-size: 0.9rem; }
 /* ==========================================================================
    Back to Top Button
    ========================================================================== */
