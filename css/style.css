@@ -428,7 +428,7 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .donate-title { color: #FFFFFF; font-size: 1.1rem; font-weight: 800; }
 .donate-subtitle { color: #888888; font-size: 0.85rem; font-weight: 500; }
 
-.footer-socials { display: flex; align-items: flex-start; }
+.footer-socials { display: flex; align-items: flex-start; margin-right: auto; }
 .footer-actions { display: flex; flex-direction: column; gap: 1.2rem; align-items: flex-start; }
 
 .social-link {
@@ -441,13 +441,13 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
 .social-link:hover { color: var(--clr-ochre); }
 
 .icon-btn {
-    width: 48px; height: 48px; background-color: rgba(255, 255, 255, 0.05); 
+    width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.05); 
     border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50%;
     display: flex; justify-content: center; align-items: center; color: #FFFFFF;
     transition: all var(--transition-fast);
     flex-shrink: 0;
 }
-.icon-btn svg { width: 22px; height: 22px; }
+.icon-btn svg { width: 18px; height: 18px; }
 
 .social-link:hover .icon-btn { 
     background-color: var(--clr-ochre); color: #FFF; border-color: var(--clr-ochre); 
@@ -515,9 +515,6 @@ sup { font-size: 0.75em; line-height: 0; position: relative; vertical-align: bas
     .footer-socials { display: flex; justify-content: center; width: 100%; margin-right: 0; }
     .footer-actions { align-items: flex-start; width: auto; }
     .social-link { width: auto; justify-content: flex-start; font-size: 0.9rem; }
-    
-    .icon-btn { width: 40px; height: 40px; }
-    .icon-btn svg { width: 18px; height: 18px; }
     
     /* Search box mobile fix */
     .inline-search-container { padding: 0 1rem; }
