@@ -13,10 +13,10 @@
     <link rel="icon" type="image/png" href="asbfavicon.png">
     <link rel="apple-touch-icon" href="asbfavicon.png">
     
+    <!-- Fonts & Main CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="css/style.css">
 
     <!-- Vercel Web Analytics -->
@@ -43,10 +43,10 @@
     <meta name="twitter:title" content="نشر اسب | سر در پی افق‌ها">
     <meta name="twitter:description" content="نشر اسب | به‌سوی دورها بر زین کلمات.">
     <meta name="twitter:image" content="https://www.asbpub.ir/asbsocial.png">
-    
 </head>
 <body>
 
+    <!-- Header & Navigation -->
     <header id="main-header" class="smart-header">
         <div class="header-art" aria-hidden="true">
             <svg viewBox="0 0 1000 100" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
@@ -72,7 +72,6 @@
         </div>
         
         <nav class="primary-nav" id="quick-nav" aria-label="منوی اصلی ناوبری">
-            
             <button id="mobile-menu-btn" class="hamburger-btn" aria-expanded="false" aria-controls="nav-links-menu" aria-label="باز و بسته کردن منو">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </button>
@@ -116,7 +115,8 @@
         </nav>
     </header>
 
-    <main class="page-content" id="main-content">
+    <!-- Main Content Area -->
+    <main role="main" class="page-content" id="main-content">
         
         <!-- Inline Smart Search -->
         <div class="inline-search-container">
@@ -129,108 +129,147 @@
             </div>
         </div>
 
-        <section id="hero-section" class="landing-section">
+        <!-- Section 1: Newest Stories -->
+        <section id="newest-stories" class="landing-section">
             <div class="container">
-                <h2 class="hero-headline">اسبی در نقطه‌ی شروع…</h2>
-                <p class="hero-subtext">این‌جا متنی برای معرفی کوتاه یا آخرین رویداد قرار می‌گیرد.</p>
+                <div class="category-group-header" style="justify-content: center; margin-bottom: 2.5rem; border-bottom: none; color: var(--clr-blue);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <h2 class="section-title" style="margin-bottom: 0;">جدیدترین‌ها</h2>
+                </div>
+
+                <div class="content-grid" style="margin-top: 0;">
+                    
+                    <article class="post-card">
+                        <a href="main/shortstories/pkd/roog/roog.html">
+                            
+                            <img src="main/shortstories/pkd/pkd.jpg" alt="جلد اثر: روگ" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
+                            
+                            <h3 class="post-title">روگ</h3>
+                            <span class="post-author">فیلیپ کی. دیک</span>
+                            
+                            <time class="post-date" datetime="۱۴۰۵/۰۳/۱۸">۱۸ ۰۳ ۱۴۰۵</time>
+                            
+                        </a>
+                    </article>
+                    
+                    <article class="post-card">
+                        <a href="main/flashfictions/fredricbrown/nightmare-in-yellow/nightmare-in-yellow.html">
+                            
+                            <img src="main/flashfictions/fredricbrown/fredricbrown.webp" alt="جلد اثر: کابوس زرد" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
+                            
+                            <h3 class="post-title">کابوس زرد</h3>
+                            <span class="post-author">فردریک براون</span>
+                            
+                            <time class="post-date" datetime="۱۴۰۵/۰۳/۱۸">۱۸ ۰۳ ۱۴۰۵</time>
+                            
+                        </a>
+                    </article>
+                    
+                    <article class="post-card">
+                        <a href="main/shortstories/kurtvonnegut/epicac/epicac.html">
+                            
+                            <img src="main/shortstories/kurtvonnegut/kurtvonnegut.webp" alt="جلد اثر: اپیکاک" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
+                            
+                            <h3 class="post-title">اپیکاک</h3>
+                            <span class="post-author">کورت وانه‌گات</span>
+                            
+                            <time class="post-date" datetime="۱۴۰۵/۰۳/۱۵">۱۵ ۰۳ ۱۴۰۵</time>
+                            
+                        </a>
+                    </article>
+                    
+                    <article class="post-card">
+                        <a href="main/shortstories/kurtvonnegut/harrison-bergeron/harrison-bergeron.html">
+                            
+                            <img src="main/shortstories/kurtvonnegut/kurtvonnegut.webp" alt="جلد اثر: هریسِن بِرجِران" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
+                            
+                            <h3 class="post-title">هریسِن بِرجِران</h3>
+                            <span class="post-author">کورت وانه‌گات</span>
+                            
+                            <time class="post-date" datetime="۱۴۰۵/۰۳/۱۵">۱۵ ۰۳ ۱۴۰۵</time>
+                            
+                        </a>
+                    </article>
+                    
+                    <article class="post-card">
+                        <a href="main/flashfictions/ronkoertge/negative-space/negative-space.html">
+                            
+                            <img src="main/flashfictions/ronkoertge/ronkoertge.jpg" alt="جلد اثر: فضای منفی" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
+                            
+                            <h3 class="post-title">فضای منفی</h3>
+                            <span class="post-author">ران کُرچ</span>
+                            
+                            <time class="post-date" datetime="۱۴۰۵/۰۳/۱۵">۱۵ ۰۳ ۱۴۰۵</time>
+                            
+                        </a>
+                    </article>
+                    
+                    <article class="post-card">
+                        <a href="main/flashfictions/fredricbrown/solipsist/solipsist.html">
+                            
+                            <img src="main/flashfictions/fredricbrown/fredricbrown.webp" alt="جلد اثر: خودتنهاپندار" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
+                            
+                            <h3 class="post-title">خودتنهاپندار</h3>
+                            <span class="post-author">فردریک براون</span>
+                            
+                            <time class="post-date" datetime="۱۴۰۵/۰۳/۱۴">۱۴ ۰۳ ۱۴۰۵</time>
+                            
+                        </a>
+                    </article>
+                    
+                </div>
             </div>
         </section>
 
-        <!-- Dynamic Content Area (Grouped by Category) -->
-        <section id="latest-releases" class="landing-section">
+        <!-- Section 2: Most Viewed (Skeleton ready for Cloudflare KV) -->
+        <section id="most-viewed-section" class="landing-section" style="background-color: #FDFBF2; border-top: 1px dashed var(--border-subtle); border-bottom: 1px dashed var(--border-subtle);">
             <div class="container">
-                <h3 class="section-title">تازه‌های نشر</h3>
-                
-                
-                <div class="category-group">
-                    <div class="category-group-header cat-flashfictions">
-                        
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                        
-                    </div>
+                <div class="category-group-header" style="justify-content: center; margin-bottom: 2.5rem; border-bottom: none; color: var(--clr-ochre);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <h2 class="section-title" style="margin-bottom: 0;">پُربازدیدترین‌ها</h2>
+                </div>
 
-                    <div class="content-grid" style="margin-top: 0;">
-                        
-                        <article class="post-card">
-                            <a href="main/flashfictions/fredricbrown/nightmare-in-yellow/nightmare-in-yellow.html">
-                                
-                                <img src="main/flashfictions/fredricbrown/fredricbrown.webp" alt="کابوس زرد" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
-                                
-                                <h3 class="post-title">کابوس زرد</h3>
-                                <span class="post-author">فردریک براون</span>
-                            </a>
-                        </article>
-                        
-                        <article class="post-card">
-                            <a href="main/flashfictions/ronkoertge/negative-space/negative-space.html">
-                                
-                                <img src="main/flashfictions/ronkoertge/ronkoertge.jpg" alt="فضای منفی" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
-                                
-                                <h3 class="post-title">فضای منفی</h3>
-                                <span class="post-author">ران کُرچ</span>
-                            </a>
-                        </article>
-                        
-                        <article class="post-card">
-                            <a href="main/flashfictions/fredricbrown/solipsist/solipsist.html">
-                                
-                                <img src="main/flashfictions/fredricbrown/fredricbrown.webp" alt="خودتنهاپندار" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
-                                
-                                <h3 class="post-title">خودتنهاپندار</h3>
-                                <span class="post-author">فردریک براون</span>
-                            </a>
-                        </article>
-                        
+                <div id="most-viewed-container" class="content-grid" style="margin-top: 0;" aria-live="polite">
+                    <div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;">
+                        <p>در حال بارگذاری آمار...</p>
                     </div>
                 </div>
-                
-                <div class="category-group">
-                    <div class="category-group-header cat-shortstories">
-                        
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>
-                        
-                    </div>
-
-                    <div class="content-grid" style="margin-top: 0;">
-                        
-                        <article class="post-card">
-                            <a href="main/shortstories/pkd/roog/roog.html">
-                                
-                                <img src="main/shortstories/pkd/pkd.jpg" alt="روگ" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
-                                
-                                <h3 class="post-title">روگ</h3>
-                                <span class="post-author">فیلیپ کی. دیک</span>
-                            </a>
-                        </article>
-                        
-                        <article class="post-card">
-                            <a href="main/shortstories/kurtvonnegut/epicac/epicac.html">
-                                
-                                <img src="main/shortstories/kurtvonnegut/kurtvonnegut.webp" alt="اپیکاک" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
-                                
-                                <h3 class="post-title">اپیکاک</h3>
-                                <span class="post-author">کورت وانه‌گات</span>
-                            </a>
-                        </article>
-                        
-                        <article class="post-card">
-                            <a href="main/shortstories/kurtvonnegut/harrison-bergeron/harrison-bergeron.html">
-                                
-                                <img src="main/shortstories/kurtvonnegut/kurtvonnegut.webp" alt="هریسِن بِرجِران" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
-                                
-                                <h3 class="post-title">هریسِن بِرجِران</h3>
-                                <span class="post-author">کورت وانه‌گات</span>
-                            </a>
-                        </article>
-                        
-                    </div>
-                </div>
-                
-
             </div>
         </section>
+
+        <!-- Section 3: Most Liked (Skeleton ready for Cloudflare KV) -->
+        <section id="most-liked-section" class="landing-section">
+            <div class="container">
+                <div class="category-group-header" style="justify-content: center; margin-bottom: 2.5rem; border-bottom: none; color: var(--clr-red);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    <h2 class="section-title" style="margin-bottom: 0;">محبوب‌ترین‌ها</h2>
+                </div>
+
+                <div id="most-liked-container" class="content-grid" style="margin-top: 0;" aria-live="polite">
+                    <div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;">
+                        <p>در حال بارگذاری آمار...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Latest Magazine Articles -->
+        <section id="latest-articles-section" class="landing-section" style="background-color: #0F0F11; color: #FFFFFF;">
+            <div class="container">
+                <div class="category-group-header" style="justify-content: center; margin-bottom: 2.5rem; border-bottom: none; color: var(--clr-ochre);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    <h2 class="section-title" style="margin-bottom: 0; color: #FFFFFF;">آخرین نوشته‌های مجله‌ی اسب</h2>
+                </div>
+
+                <div class="content-grid" style="margin-top: 0;">
+                    
+                </div>
+            </div>
+        </section>
+
     </main>
 
+    <!-- Main Footer -->
     <footer class="main-footer">
         <div class="container">
             <div class="footer-top">
@@ -244,7 +283,7 @@
                     </div>
                 </a>
 
-            <!-- Left Section: Social & Contact Actions -->
+                <!-- Left Section: Social & Contact Actions -->
                 <div class="footer-socials">
                     <div class="footer-actions">
                         <a href="https://t.me/asbpub" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="ورود به کانال تلگرام نشر اسب">
@@ -269,7 +308,7 @@
                         </a>
                     </div>
                 </div>
-                            </div>
+            </div>
 
             <!-- Bottom Section: Copyright -->
             <div class="footer-bottom">
@@ -278,11 +317,12 @@
         </div>
     </footer>
     
+    <!-- Back to Top Button -->
     <button id="back-to-top" class="back-to-top-btn" aria-label="بازگشت به بالای صفحه">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
     </button>
     
-    <!-- Pass base path to JS for resolving JSON route -->
+    <!-- Base Path & Scripts -->
     <script>window.ASB_BASE_PATH = "";</script>
     <script src="js/main.js"></script>
 
