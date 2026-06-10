@@ -6,20 +6,20 @@
     <meta name="description" content="بخوانید فضای منفی در نشر اسب.">
     <title>فضای منفی | نشر اسب</title>
 
-        <!-- Google Search Console Verification -->
+    <!-- Google Search Console Verification -->
     <meta name="google-site-verification" content="hHlYCoOa9y4FMyctEhX-zXD5T6JLBfEiVXu-eVFrKq0" />
     
     <!-- Favicon & Web App Icons -->
     <link rel="icon" type="image/png" href="../../../../asbfavicon.png">
     <link rel="apple-touch-icon" href="../../../../asbfavicon.png">
     
+    <!-- Fonts & Main CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="../../../../css/style.css">
 
-<!-- Vercel Web Analytics -->
+    <!-- Vercel Web Analytics -->
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
@@ -43,10 +43,10 @@
     <meta name="twitter:title" content="فضای منفی | نشر اسب">
     <meta name="twitter:description" content="بخوانید فضای منفی در نشر اسب.">
     <meta name="twitter:image" content="https://www.asbpub.ir/asbsocial.png">
-    
 </head>
 <body>
 
+    <!-- Header & Navigation -->
     <header id="main-header" class="smart-header">
         <div class="header-art" aria-hidden="true">
             <svg viewBox="0 0 1000 100" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
@@ -72,7 +72,6 @@
         </div>
         
         <nav class="primary-nav" id="quick-nav" aria-label="منوی اصلی ناوبری">
-            
             <button id="mobile-menu-btn" class="hamburger-btn" aria-expanded="false" aria-controls="nav-links-menu" aria-label="باز و بسته کردن منو">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </button>
@@ -116,7 +115,8 @@
         </nav>
     </header>
 
-    <main class="page-content story-reading-layout" id="main-content">
+    <!-- Main Content Area -->
+    <main role="main" class="page-content story-reading-layout" id="main-content">
 
         <article class="story-article">
             
@@ -125,18 +125,20 @@
                     <h1 class="story-title">فضای منفی</h1>
                     <div class="story-meta">
                         
-                        <span class="meta-author">ران کُرچ</span>
+                        <span class="meta-author" aria-label="نام نویسنده">ران کُرچ</span>
                         
                         
                         
-                        <span class="meta-translator">ترجمه‌ی امیرمحمد شیرازیان</span>
+                        <span class="meta-translator" aria-label="مترجم">ترجمه‌ی امیرمحمد شیرازیان</span>
+                        
+
                         
                     </div>
                 </div>
                 
                 
                 <div class="story-author-image">
-                    <img src="../ronkoertge.jpg" alt="ران کُرچ" class="story-cover" width="80" height="80" fetchpriority="high" decoding="async">
+                    <img src="../ronkoertge.jpg" alt="تصویر نویسنده: ران کُرچ" class="story-cover" width="80" height="80" fetchpriority="high" decoding="async">
                 </div>
                 
             </header>
@@ -146,6 +148,20 @@
 <p>وقتی بچه بودم این کار را شروع کردیم. من جوراب‌ها را لوله می‌کردم. پدرم مثلاً مرا داخلِ چمدان می‌گذاشت و می‌زدیم زیرِ خنده. بعضی پسرها با پدرشان در بسکتبال‌بازی یا گپ زدن درباره‌ی شورلت جفت‌وجورند. ما سرِ چمدان‌‌ها با هم جفت‌وجور بودیم.</p>
 <p>دوازده‌ساله که بودم، اگر سرش شلوغ بود، من چمدانش را می‌بستم. مادرم هم سعی می‌کرد، اما فوت‌وفنش را خوب بلد نبود. وقتی پدرم می‌رسید به مقصد و چمدانش را باز می‌کرد پیامک می‌داد که «عالی!» همین یک کلمه‌‌اش برایم یک‌ دنیا ارزش داشت.</p>
 <p>مراسم یادبود افتضاح بود. پدرم درازبه‌دراز در آن جعبه‌ی بزرگ خوابیده بود و من اشک می‌ریختم و به این فکر می‌کردم که «فقط نگاه کن به آن‌همه فضای هدررفته!»</p>
+            </div>
+
+            <!-- Post Interactions (Likes & Views) - Skeleton ready for JS -->
+            <div class="post-interactions" aria-live="polite">
+                <div class="interaction-group">
+                    <div class="interaction-item view-count-item" title="تعداد بازدید" aria-label="تعداد بازدید">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <span id="view-count" class="interaction-count">...</span>
+                    </div>
+                    <button id="like-btn" class="interaction-btn like-btn" aria-label="پسندیدن این مطلب">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                        <span id="like-count" class="interaction-count">...</span>
+                    </button>
+                </div>
             </div>
             
             <!-- Splitted Tags Area -->
@@ -170,10 +186,41 @@
                 </div>
             </footer>
             
+
+            <!-- Comments Section - Skeleton ready for JS -->
+            <section class="comments-section" id="comments">
+                <h3 class="comments-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    نظرات خوانندگان
+                </h3>
+                
+                <!-- Comment Form -->
+                <div class="comment-form-wrapper">
+                    <form id="comment-form" class="comment-form">
+                        <div class="form-group">
+                            <label for="comment-name">نام شما</label>
+                            <input type="text" id="comment-name" name="name" class="form-control" required autocomplete="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment-text">دیدگاه شما</label>
+                            <textarea id="comment-text" name="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn" style="width: 100%;">ثبت دیدگاه</button>
+                        <p id="comment-status" class="comment-status-msg" aria-live="polite"></p>
+                    </form>
+                </div>
+
+                <!-- Comments List -->
+                <div id="comments-list" class="comments-list" aria-live="polite">
+                    <div class="empty-state" style="padding: 1.5rem;">در حال بارگذاری نظرات...</div>
+                    <!-- Comments will be injected here dynamically -->
+                </div>
+            </section>
             
         </article>
     </main>
 
+    <!-- Main Footer -->
     <footer class="main-footer">
         <div class="container">
             <div class="footer-top">
@@ -187,7 +234,7 @@
                     </div>
                 </a>
 
-<!-- Left Section: Social & Contact Actions -->
+                <!-- Left Section: Social & Contact Actions -->
                 <div class="footer-socials">
                     <div class="footer-actions">
                         <a href="https://t.me/asbpub" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="ورود به کانال تلگرام نشر اسب">
@@ -212,7 +259,7 @@
                         </a>
                     </div>
                 </div>
-                            </div>
+            </div>
 
             <!-- Bottom Section: Copyright -->
             <div class="footer-bottom">
@@ -221,11 +268,12 @@
         </div>
     </footer>
 
+    <!-- Back to Top Button -->
     <button id="back-to-top" class="back-to-top-btn" aria-label="بازگشت به بالای صفحه">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
     </button>
 
-    <!-- Pass base path to JS for resolving JSON route -->
+    <!-- Base Path & Scripts -->
     <script>window.ASB_BASE_PATH = "../../../../";</script>
     <script src="../../../../js/main.js"></script>
 
