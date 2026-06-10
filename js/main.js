@@ -2,23 +2,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Global Constants
     const basePath = window.ASB_BASE_PATH || '';
-    const ASB_API_URL = "https://asbpub-forms.asbpub-official.workers.dev";
+    const ASB_API_URL = "https://asbpub-forms.asbpub-official.workers.dev"; // Your Cloudflare Worker URL
 
     // Helper: Security function to prevent XSS attacks in comments
     const escapeHTML = (str) => {
         if (!str) return '';
         return str.replace(/[&<>'"]/g, tag => ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            "'": '&#39;',
-            '"': '&quot;'
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
         }[tag]));
     };
 
-    // Helper: Convert English numbers to Persian magically
-    const toPersianNum = (num) => {
-        return num.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+    // Helper: Convert English Digits to beautiful Persian Digits
+    const toPersianDigits = (num) => {
+        const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        return num.toString().replace(/\d/g, x => farsiDigits[x]);
     };
 
     // ==========================================================================
@@ -205,16 +202,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch(`${ASB_API_URL}/api/view`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: currentPath, title: storyTitle, author: storyAuthor, cover: storyCover, date: storyDate })
+                    body: JSON.stringify({
+                        url: currentPath, title: storyTitle, author: storyAuthor, cover: storyCover, date: storyDate
+                    })
                 });
                 
                 if (response.ok) {
                     const stats = await response.json();
-                    viewCountEl.innerText = toPersianNum(stats.views || 0);
-                    likeCountEl.innerText = toPersianNum(stats.likes || 0);
+                    viewCountEl.innerText = toPersianDigits(stats.views || 0);
+                    likeCountEl.innerText = toPersianDigits(stats.likes || 0);
                 }
             } catch (error) {
-                console.error("Failed to register view:", error);
+                console.error("Failed to register view/fetch stats:", error);
                 viewCountEl.innerText = "-";
                 likeCountEl.innerText = "-";
             }
@@ -230,23 +229,27 @@ document.addEventListener('DOMContentLoaded', () => {
             likeBtn.classList.add('liked');
             likeBtn.setAttribute('aria-label', 'شما این مطلب را پسندیده‌اید');
             
-            // Convert persian back to int, add 1, convert to persian again!
-            const enLikeStr = likeCountEl.innerText.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-            let currentLikes = parseInt(enLikeStr) || 0;
-            likeCountEl.innerText = toPersianNum(currentLikes + 1);
+            // Convert current Persian string back to int for addition, then format back
+            let currentLikesStr = likeCountEl.innerText;
+            let currentLikesEng = currentLikesStr.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+            let currentLikes = parseInt(currentLikesEng) || 0;
+            
+            likeCountEl.innerText = toPersianDigits(currentLikes + 1);
 
             try {
                 await fetch(`${ASB_API_URL}/api/like`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: currentPath, title: storyTitle, author: storyAuthor, cover: storyCover, date: storyDate })
+                    body: JSON.stringify({
+                        url: currentPath, title: storyTitle, author: storyAuthor, cover: storyCover, date: storyDate
+                    })
                 });
             } catch (error) {
                 console.error("Failed to register like:", error);
                 hasLiked = false;
                 localStorage.removeItem(storageKey);
                 likeBtn.classList.remove('liked');
-                likeCountEl.innerText = toPersianNum(currentLikes);
+                likeCountEl.innerText = toPersianDigits(currentLikes);
             }
         });
     }
@@ -259,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderPostCard = (post) => {
         const coverHtml = post.cover ? `<img src="${post.cover}" alt="جلد اثر: ${post.title}" class="post-cover" width="85" height="85" loading="lazy" decoding="async">` : '';
-        const dateHtml = post.date ? `<time class="post-date">${toPersianNum(post.date)}</time>` : '';
+        const dateHtml = post.date ? `<time class="post-date">${post.date}</time>` : '';
         const authorHtml = post.author ? `<span class="post-author">${post.author}</span>` : '';
         
         return `
@@ -306,31 +309,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 6. Interactive Comments System (Nested & Admin Replies)
+    // 6. Interactive Comments System (Fetch, Submit & Nested Replies)
     // ==========================================================================
     const commentForm = document.getElementById('comment-form');
     const commentsList = document.getElementById('comments-list');
     const commentStatusMsg = document.getElementById('comment-status');
-    const formWrapper = document.querySelector('.comment-form-wrapper');
+    let currentReplyParentId = null;
+    let currentReplyName = null;
 
-    if (commentsList && commentForm && formWrapper) {
+    if (commentsList) {
         
-        // Dynamically inject the "Replying To" badge UI
-        const badge = document.createElement('div');
-        badge.id = 'replying-badge';
-        badge.className = 'replying-badge';
-        badge.innerHTML = `<span>در پاسخ به: <strong id="replying-to-name"></strong></span> <button type="button" id="cancel-reply-btn" class="cancel-reply">لغو پاسخ ✕</button>`;
-        formWrapper.insertBefore(badge, commentForm);
-        
-        let currentParentId = null;
+        // Helper to render a single comment block
+        const renderCommentHtml = (comment, isReply = false) => {
+            const adminReplyHtml = comment.admin_reply ? `
+                <div class="comment-reply">
+                    <div class="reply-author">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        پاسخ نشر اسب
+                    </div>
+                    <div class="comment-body">${escapeHTML(comment.admin_reply)}</div>
+                </div>
+            ` : '';
 
-        // Reset Reply State
-        document.getElementById('cancel-reply-btn').addEventListener('click', () => {
-            currentParentId = null;
-            badge.classList.remove('active');
-        });
+            // Only root comments get a reply button
+            const replyButtonHtml = !isReply ? `
+                <button type="button" class="reply-btn" data-id="${comment.id}" data-name="${escapeHTML(comment.name)}" aria-label="پاسخ به ${escapeHTML(comment.name)}">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 10 20 15 15 20"></polyline><path d="M4 4v7a4 4 0 0 0 4 4h12"></path></svg>
+                    پاسخ
+                </button>
+            ` : '';
 
-        // Load and Build Comments Tree
+            return `
+                <div class="comment-item fade-in-up ${isReply ? 'nested-comment' : ''}" id="comment-${comment.id}">
+                    <div class="comment-header">
+                        <div class="comment-meta">
+                            <span class="comment-author">${escapeHTML(comment.name)}</span>
+                            <span class="comment-date">${escapeHTML(comment.date)}</span>
+                        </div>
+                        ${replyButtonHtml}
+                    </div>
+                    <div class="comment-body">${escapeHTML(comment.text)}</div>
+                    ${adminReplyHtml}
+                </div>
+            `;
+        };
+
         const loadComments = async () => {
             try {
                 const response = await fetch(`${ASB_API_URL}/api/comments?url=${encodeURIComponent(currentPath)}`);
@@ -339,57 +362,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 const comments = await response.json();
                 
                 if (comments.length > 0) {
-                    const topLevel = comments.filter(c => !c.parentId);
-                    const children = comments.filter(c => c.parentId);
+                    // Separate roots and nested replies
+                    const rootComments = comments.filter(c => !c.parentId);
+                    const childComments = comments.filter(c => c.parentId);
 
-                    const renderComment = (comment, isNested = false) => {
-                        // 1. Check for Admin Reply
-                        let adminReplyHtml = '';
-                        if (comment.admin_reply) {
-                            adminReplyHtml = `
-                                <div class="comment-reply">
-                                    <div class="reply-author">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                                        پاسخ نشر اسب
-                                    </div>
-                                    <div class="comment-body">${escapeHTML(comment.admin_reply)}</div>
-                                </div>
-                            `;
+                    let commentsHtml = '';
+                    rootComments.forEach(root => {
+                        commentsHtml += renderCommentHtml(root, false);
+                        
+                        // Check if this root comment has any replies
+                        const children = childComments.filter(c => c.parentId === root.id);
+                        if (children.length > 0) {
+                            commentsHtml += `<div class="nested-comments-wrapper">`;
+                            children.forEach(child => {
+                                commentsHtml += renderCommentHtml(child, true);
+                            });
+                            commentsHtml += `</div>`;
                         }
+                    });
 
-                        // 2. Check for User Replies (Nested)
-                        let nestedHtml = '';
-                        if (!isNested) {
-                            const myChildren = children.filter(c => c.parentId === comment.id);
-                            if (myChildren.length > 0) {
-                                nestedHtml = `<div class="nested-comments">` + myChildren.map(c => renderComment(c, true)).join('') + `</div>`;
+                    commentsList.innerHTML = commentsHtml;
+
+                    // Attach click listeners to "Reply" buttons
+                    document.querySelectorAll('.reply-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            currentReplyParentId = btn.getAttribute('data-id');
+                            currentReplyName = btn.getAttribute('data-name');
+                            
+                            // Create or update the UI badge above the form
+                            let badge = document.getElementById('replying-badge');
+                            if(!badge) {
+                                badge = document.createElement('div');
+                                badge.id = 'replying-badge';
+                                badge.className = 'replying-badge';
+                                commentForm.parentNode.insertBefore(badge, commentForm);
                             }
-                        }
+                            badge.innerHTML = `در حال پاسخ به: <strong>${currentReplyName}</strong> <button type="button" id="cancel-reply">لغو</button>`;
+                            
+                            // Cancel reply listener
+                            document.getElementById('cancel-reply').addEventListener('click', () => {
+                                currentReplyParentId = null;
+                                currentReplyName = null;
+                                badge.remove();
+                            });
 
-                        // 3. Reply Button (Only allowed on top-level comments to prevent messy nesting)
-                        const replyBtnHtml = !isNested ? `
-                            <div class="comment-actions">
-                                <button type="button" class="reply-btn" data-id="${comment.id}" data-name="${escapeHTML(comment.name)}">
-                                    پاسخ دادن ↩
-                                </button>
-                            </div>
-                        ` : '';
+                            // Smooth scroll and focus to the text area
+                            const textInput = document.getElementById('comment-text');
+                            textInput.focus();
+                            textInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        });
+                    });
 
-                        return `
-                            <div class="comment-item fade-in-up">
-                                <div class="comment-header">
-                                    <span class="comment-author">${escapeHTML(comment.name)}</span>
-                                    <span class="comment-date">${toPersianNum(escapeHTML(comment.date))}</span>
-                                </div>
-                                <div class="comment-body">${escapeHTML(comment.text)}</div>
-                                ${adminReplyHtml}
-                                ${replyBtnHtml}
-                                ${nestedHtml}
-                            </div>
-                        `;
-                    };
-
-                    commentsList.innerHTML = topLevel.map(c => renderComment(c, false)).join('');
                 } else {
                     commentsList.innerHTML = '<div class="empty-state" style="padding: 1.5rem; font-size: 0.95rem;">هنوز دیدگاهی برای این مطلب ثبت نشده است. اولین نفر باشید!</div>';
                 }
@@ -401,75 +424,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loadComments();
 
-        // Handle Click on "Reply" buttons
-        commentsList.addEventListener('click', (e) => {
-            if (e.target.classList.contains('reply-btn')) {
-                currentParentId = e.target.getAttribute('data-id');
-                const parentName = e.target.getAttribute('data-name');
+        // Handle Comment Form Submission
+        if (commentForm) {
+            commentForm.addEventListener('submit', async (e) => {
+                e.preventDefault(); 
                 
-                document.getElementById('replying-to-name').innerText = parentName;
-                badge.classList.add('active');
+                const submitBtn = commentForm.querySelector('button[type="submit"]');
+                const nameInput = document.getElementById('comment-name');
+                const textInput = document.getElementById('comment-text');
                 
-                commentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                document.getElementById('comment-text').focus();
-            }
-        });
-
-        // Handle Form Submission
-        commentForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            
-            const submitBtn = commentForm.querySelector('button[type="submit"]');
-            const nameInput = document.getElementById('comment-name');
-            const textInput = document.getElementById('comment-text');
-            
-            const nameVal = nameInput.value.trim();
-            const textVal = textInput.value.trim();
-            
-            if (!nameVal || !textVal) return;
-
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'در حال ارسال...';
-            submitBtn.style.opacity = '0.7';
-            commentStatusMsg.className = 'comment-status-msg'; 
-            commentStatusMsg.innerText = '';
-
-            try {
-                const response = await fetch(`${ASB_API_URL}/api/comment/add`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        url: currentPath,
-                        name: nameVal,
-                        text: textVal,
-                        parentId: currentParentId // Will be null if not replying
-                    })
-                });
-
-                if (!response.ok) throw new Error("Failed to send comment");
-
-                commentStatusMsg.innerText = 'دیدگاه شما با موفقیت ارسال شد و پس از تأیید نمایش داده می‌شود.';
-                commentStatusMsg.classList.add('success');
-                commentForm.reset();
+                const nameVal = nameInput.value.trim();
+                const textVal = textInput.value.trim();
                 
-                // Reset reply state
-                currentParentId = null;
-                badge.classList.remove('active');
+                if (!nameVal || !textVal) return;
 
-            } catch (error) {
-                console.error("Error sending comment:", error);
-                commentStatusMsg.innerText = 'خطا در ارسال دیدگاه. لطفاً اتصال اینترنت را بررسی کنید.';
-                commentStatusMsg.classList.add('error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'ثبت دیدگاه';
-                submitBtn.style.opacity = '1';
-                
-                setTimeout(() => {
-                    commentStatusMsg.classList.remove('success', 'error');
-                    commentStatusMsg.innerText = '';
-                }, 6000);
-            }
-        });
+                // UI Loading State
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'در حال ارسال...';
+                submitBtn.style.opacity = '0.7';
+                commentStatusMsg.className = 'comment-status-msg'; 
+                commentStatusMsg.innerText = '';
+
+                try {
+                    const response = await fetch(`${ASB_API_URL}/api/comment/add`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            url: currentPath,
+                            name: nameVal,
+                            text: textVal,
+                            parentId: currentReplyParentId // Send the parent ID if it's a reply
+                        })
+                    });
+
+                    if (!response.ok) throw new Error("Failed to send comment");
+
+                    // Success UI
+                    commentStatusMsg.innerText = 'دیدگاه شما با موفقیت ارسال شد و پس از تأیید نمایش داده می‌شود.';
+                    commentStatusMsg.classList.add('success');
+                    commentForm.reset();
+                    
+                    // Reset Reply State
+                    currentReplyParentId = null;
+                    const badge = document.getElementById('replying-badge');
+                    if(badge) badge.remove();
+
+                } catch (error) {
+                    console.error("Error sending comment:", error);
+                    commentStatusMsg.innerText = 'خطا در ارسال دیدگاه. لطفاً اتصال اینترنت را بررسی کنید.';
+                    commentStatusMsg.classList.add('error');
+                } finally {
+                    // Reset Button State
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'ثبت دیدگاه';
+                    submitBtn.style.opacity = '1';
+                    
+                    setTimeout(() => {
+                        commentStatusMsg.classList.remove('success', 'error');
+                        commentStatusMsg.innerText = '';
+                    }, 6000);
+                }
+            });
+        }
     }
 });
