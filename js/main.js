@@ -4,6 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const basePath = window.ASB_BASE_PATH || '';
     const ASB_API_URL = "https://asbpub-forms.asbpub-official.workers.dev"; // Your Cloudflare Worker URL
 
+    // Helper: Security function to prevent XSS attacks in comments
+    const escapeHTML = (str) => {
+        if (!str) return '';
+        return str.replace(/[&<>'"]/g, tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[tag]));
+    };
+
     // ==========================================================================
     // 1. Mobile Menu Controller
     // ==========================================================================
@@ -166,12 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewCountEl = document.getElementById('view-count');
     const likeCountEl = document.getElementById('like-count');
     const likeBtn = document.getElementById('like-btn');
+    const currentPath = window.location.pathname; // Used by both stats and comments
     
     // Check if we are on a Story/Article reading page
     if (viewCountEl && likeCountEl && likeBtn) {
-        
-        // Extract Meta Data securely from the DOM
-        const currentPath = window.location.pathname; // Unique URL key for KV
         const storyTitle = document.querySelector('.story-title')?.innerText || "بدون عنوان";
         const storyAuthor = document.querySelector('.meta-author')?.innerText || "";
         const storyDate = document.querySelector('.meta-date time')?.innerText || "";
@@ -214,14 +224,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // Fire the view registration
         registerView();
 
         // Handle Like Button Click
         likeBtn.addEventListener('click', async () => {
-            if (hasLiked) return; // Prevent double-liking
+            if (hasLiked) return; 
             
-            // Optimistic UI Update (Change UI instantly for better UX)
             hasLiked = true;
             localStorage.setItem(storageKey, 'true');
             likeBtn.classList.add('liked');
@@ -229,7 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let currentLikes = parseInt(likeCountEl.innerText) || 0;
             likeCountEl.innerText = currentLikes + 1;
 
-            // Send Like to Cloudflare
             try {
                 await fetch(`${ASB_API_URL}/api/like`, {
                     method: 'POST',
@@ -244,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } catch (error) {
                 console.error("Failed to register like:", error);
-                // Revert optimistic update if network fails
                 hasLiked = false;
                 localStorage.removeItem(storageKey);
                 likeBtn.classList.remove('liked');
@@ -259,7 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const mostViewedContainer = document.getElementById('most-viewed-container');
     const mostLikedContainer = document.getElementById('most-liked-container');
 
-    // Helper function to render a Post Card dynamically
     const renderPostCard = (post) => {
         const coverHtml = post.cover ? `<img src="${post.cover}" alt="جلد اثر: ${post.title}" class="post-cover" width="85" height="85" loading="lazy" decoding="async">` : '';
         const dateHtml = post.date ? `<time class="post-date">${post.date}</time>` : '';
@@ -285,14 +290,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const stats = await response.json();
                 
-                // Render Most Viewed
                 if (stats.topViews && stats.topViews.length > 0) {
                     mostViewedContainer.innerHTML = stats.topViews.map(renderPostCard).join('');
                 } else {
                     mostViewedContainer.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;"><p>هنوز آماری ثبت نشده است.</p></div>';
                 }
 
-                // Render Most Liked
                 if (stats.topLikes && stats.topLikes.length > 0) {
                     mostLikedContainer.innerHTML = stats.topLikes.map(renderPostCard).join('');
                 } else {
@@ -308,5 +311,104 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         loadHomepageStats();
+    }
+
+    // ==========================================================================
+    // 6. Interactive Comments System (Fetch & Submit)
+    // ==========================================================================
+    const commentForm = document.getElementById('comment-form');
+    const commentsList = document.getElementById('comments-list');
+    const commentStatusMsg = document.getElementById('comment-status');
+
+    if (commentsList) {
+        // Fetch approved comments on page load
+        const loadComments = async () => {
+            try {
+                const response = await fetch(`${ASB_API_URL}/api/comments?url=${encodeURIComponent(currentPath)}`);
+                if (!response.ok) throw new Error("Failed to load comments");
+                
+                const comments = await response.json();
+                
+                if (comments.length > 0) {
+                    let commentsHtml = '';
+                    comments.forEach(comment => {
+                        commentsHtml += `
+                            <div class="comment-item fade-in-up">
+                                <div class="comment-header">
+                                    <span class="comment-author">${escapeHTML(comment.name)}</span>
+                                    <span class="comment-date">${escapeHTML(comment.date)}</span>
+                                </div>
+                                <div class="comment-body">${escapeHTML(comment.text)}</div>
+                            </div>
+                        `;
+                    });
+                    commentsList.innerHTML = commentsHtml;
+                } else {
+                    commentsList.innerHTML = '<div class="empty-state" style="padding: 1.5rem; font-size: 0.95rem;">هنوز دیدگاهی برای این مطلب ثبت نشده است. اولین نفر باشید!</div>';
+                }
+            } catch (error) {
+                console.error("Error loading comments:", error);
+                commentsList.innerHTML = '<div class="empty-state" style="padding: 1.5rem; font-size: 0.95rem;">خطا در دریافت نظرات.</div>';
+            }
+        };
+
+        loadComments();
+
+        // Handle Comment Form Submission
+        if (commentForm) {
+            commentForm.addEventListener('submit', async (e) => {
+                e.preventDefault(); // Stop page reload
+                
+                const submitBtn = commentForm.querySelector('button[type="submit"]');
+                const nameInput = document.getElementById('comment-name');
+                const textInput = document.getElementById('comment-text');
+                
+                const nameVal = nameInput.value.trim();
+                const textVal = textInput.value.trim();
+                
+                if (!nameVal || !textVal) return;
+
+                // UI Loading State
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'در حال ارسال...';
+                submitBtn.style.opacity = '0.7';
+                commentStatusMsg.className = 'comment-status-msg'; // Reset class
+                commentStatusMsg.innerText = '';
+
+                try {
+                    const response = await fetch(`${ASB_API_URL}/api/comment/add`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            url: currentPath,
+                            name: nameVal,
+                            text: textVal
+                        })
+                    });
+
+                    if (!response.ok) throw new Error("Failed to send comment");
+
+                    // Success UI
+                    commentStatusMsg.innerText = 'دیدگاه شما با موفقیت ارسال شد و پس از تأیید نمایش داده می‌شود.';
+                    commentStatusMsg.classList.add('success');
+                    commentForm.reset();
+                } catch (error) {
+                    console.error("Error sending comment:", error);
+                    commentStatusMsg.innerText = 'خطا در ارسال دیدگاه. لطفاً اتصال اینترنت را بررسی کنید.';
+                    commentStatusMsg.classList.add('error');
+                } finally {
+                    // Reset Button State
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'ثبت دیدگاه';
+                    submitBtn.style.opacity = '1';
+                    
+                    // Hide success/error message after 6 seconds
+                    setTimeout(() => {
+                        commentStatusMsg.classList.remove('success', 'error');
+                        commentStatusMsg.innerText = '';
+                    }, 6000);
+                }
+            });
+        }
     }
 });
