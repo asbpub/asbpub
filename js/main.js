@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const storyAuthor = document.querySelector('.meta-author')?.innerText || "";
         const storyDate = document.querySelector('.meta-date time')?.innerText || "";
         const coverImg = document.querySelector('.story-cover');
-        const storyCover = coverImg ? coverImg.getAttribute('src') : "";
+        const storyCover = coverImg ? coverImg.src : "";
 
         // Check LocalStorage to see if user already liked this post
         const storageKey = `liked_${currentPath}`;
