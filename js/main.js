@@ -229,7 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
             likeBtn.classList.add('liked');
             likeBtn.setAttribute('aria-label', 'شما این مطلب را پسندیده‌اید');
             
-            // Convert current Persian string back to int for addition, then format back
             let currentLikesStr = likeCountEl.innerText;
             let currentLikesEng = currentLikesStr.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
             let currentLikes = parseInt(currentLikesEng) || 0;
@@ -288,13 +287,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (stats.topViews && stats.topViews.length > 0) {
                     mostViewedContainer.innerHTML = stats.topViews.map(renderPostCard).join('');
                 } else {
-                    mostViewedContainer.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;"><p>هنوز آماری ثبت نشده است.</p></div>';
+                    mostViewedContainer.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;"><p>هنوز آماری ثبت نشده‌است.</p></div>';
                 }
 
                 if (stats.topLikes && stats.topLikes.length > 0) {
                     mostLikedContainer.innerHTML = stats.topLikes.map(renderPostCard).join('');
                 } else {
-                    mostLikedContainer.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;"><p>هنوز محبوبیتی ثبت نشده است.</p></div>';
+                    mostLikedContainer.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;"><p>هنوز محبوبیتی ثبت نشده‌است.</p></div>';
                 }
 
             } catch (error) {
@@ -309,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 6. Interactive Comments System (Fetch, Submit & Nested Replies)
+    // 6. Advanced Interactive Comments System (Fetch, Submit, Delete & Nested)
     // ==========================================================================
     const commentForm = document.getElementById('comment-form');
     const commentsList = document.getElementById('comments-list');
@@ -319,19 +318,87 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (commentsList) {
         
+        // Helper: Get user's own comments from LocalStorage
+        const getMyComments = () => {
+            try { return JSON.parse(localStorage.getItem('asb_comments')) || []; } 
+            catch (e) { return []; }
+        };
+
+        // Helper: Delete comment request
+        const deleteMyComment = async (commentId, token, btnEl) => {
+            if (!confirm("آیا از حذف دیدگاه خود مطمئن هستید؟")) return;
+            
+            const originalText = btnEl.innerText;
+            btnEl.innerText = "در حال حذف...";
+            btnEl.disabled = true;
+
+            try {
+                const res = await fetch(`${ASB_API_URL}/api/comment/delete`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: currentPath, id: commentId, token: token })
+                });
+
+                if (res.ok) {
+                    // Remove from UI
+                    const cItem = document.getElementById(`comment-${commentId}`);
+                    if (cItem) {
+                        cItem.style.opacity = '0.3';
+                        setTimeout(() => cItem.remove(), 500);
+                    }
+                    // Remove from LocalStorage
+                    let myComs = getMyComments();
+                    myComs = myComs.filter(c => c.id !== commentId);
+                    localStorage.setItem('asb_comments', JSON.stringify(myComs));
+                } else {
+                    alert("خطا در حذف دیدگاه. ممکن است منقضی شده باشد.");
+                    btnEl.innerText = originalText;
+                    btnEl.disabled = false;
+                }
+            } catch (err) {
+                alert("ارتباط با سرور برقرار نشد.");
+                btnEl.innerText = originalText;
+                btnEl.disabled = false;
+            }
+        };
+        
         // Helper to render a single comment block
         const renderCommentHtml = (comment, isReply = false) => {
-            const adminReplyHtml = comment.admin_reply ? `
-                <div class="comment-reply">
-                    <div class="reply-author">
-                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                        پاسخ نشر اسب
-                    </div>
-                    <div class="comment-body">${escapeHTML(comment.admin_reply)}</div>
-                </div>
+            
+            // Official Replies (Admin, Author, Translator)
+            let officialRepliesHtml = '';
+            if (comment.replies) {
+                if (comment.replies.admin) {
+                    officialRepliesHtml += `
+                        <div class="comment-reply admin-reply">
+                            <div class="reply-author"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> پاسخ نشر اسب</div>
+                            <div class="comment-body">${escapeHTML(comment.replies.admin)}</div>
+                        </div>`;
+                }
+                if (comment.replies.author) {
+                    officialRepliesHtml += `
+                        <div class="comment-reply author-reply">
+                            <div class="reply-author"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg> پاسخ نویسنده‌ی اثر</div>
+                            <div class="comment-body">${escapeHTML(comment.replies.author)}</div>
+                        </div>`;
+                }
+                if (comment.replies.translator) {
+                    officialRepliesHtml += `
+                        <div class="comment-reply translator-reply">
+                            <div class="reply-author"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> پاسخ مترجمِ اثر</div>
+                            <div class="comment-body">${escapeHTML(comment.replies.translator)}</div>
+                        </div>`;
+                }
+            }
+
+            // User Self-Delete Button
+            const myComments = getMyComments();
+            const myComData = myComments.find(c => c.id === comment.id);
+            const deleteBtnHtml = myComData ? `
+                <button type="button" class="delete-own-comment-btn" data-id="${comment.id}" data-token="${myComData.token}" aria-label="حذف دیدگاه من" title="حذف این دیدگاه">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
             ` : '';
 
-            // Only root comments get a reply button
             const replyButtonHtml = !isReply ? `
                 <button type="button" class="reply-btn" data-id="${comment.id}" data-name="${escapeHTML(comment.name)}" aria-label="پاسخ به ${escapeHTML(comment.name)}">
                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 10 20 15 15 20"></polyline><path d="M4 4v7a4 4 0 0 0 4 4h12"></path></svg>
@@ -343,13 +410,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="comment-item fade-in-up ${isReply ? 'nested-comment' : ''}" id="comment-${comment.id}">
                     <div class="comment-header">
                         <div class="comment-meta">
-                            <span class="comment-author">${escapeHTML(comment.name)}</span>
+                            <div style="display:flex; align-items:center; gap: 0.5rem;">
+                                <span class="comment-author">${escapeHTML(comment.name)}</span>
+                                ${deleteBtnHtml}
+                            </div>
                             <span class="comment-date">${escapeHTML(comment.date)}</span>
                         </div>
                         ${replyButtonHtml}
                     </div>
                     <div class="comment-body">${escapeHTML(comment.text)}</div>
-                    ${adminReplyHtml}
+                    ${officialRepliesHtml}
                 </div>
             `;
         };
@@ -362,15 +432,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const comments = await response.json();
                 
                 if (comments.length > 0) {
-                    // Separate roots and nested replies
                     const rootComments = comments.filter(c => !c.parentId);
                     const childComments = comments.filter(c => c.parentId);
 
                     let commentsHtml = '';
                     rootComments.forEach(root => {
                         commentsHtml += renderCommentHtml(root, false);
-                        
-                        // Check if this root comment has any replies
                         const children = childComments.filter(c => c.parentId === root.id);
                         if (children.length > 0) {
                             commentsHtml += `<div class="nested-comments-wrapper">`;
@@ -383,13 +450,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     commentsList.innerHTML = commentsHtml;
 
-                    // Attach click listeners to "Reply" buttons
+                    // Attach Reply Listeners
                     document.querySelectorAll('.reply-btn').forEach(btn => {
                         btn.addEventListener('click', () => {
                             currentReplyParentId = btn.getAttribute('data-id');
                             currentReplyName = btn.getAttribute('data-name');
                             
-                            // Create or update the UI badge above the form
                             let badge = document.getElementById('replying-badge');
                             if(!badge) {
                                 badge = document.createElement('div');
@@ -399,22 +465,29 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                             badge.innerHTML = `در حال پاسخ به: <strong>${currentReplyName}</strong> <button type="button" id="cancel-reply">لغو</button>`;
                             
-                            // Cancel reply listener
                             document.getElementById('cancel-reply').addEventListener('click', () => {
                                 currentReplyParentId = null;
                                 currentReplyName = null;
                                 badge.remove();
                             });
 
-                            // Smooth scroll and focus to the text area
                             const textInput = document.getElementById('comment-text');
                             textInput.focus();
                             textInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         });
                     });
 
+                    // Attach Delete Listeners
+                    document.querySelectorAll('.delete-own-comment-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const cId = btn.getAttribute('data-id');
+                            const cToken = btn.getAttribute('data-token');
+                            deleteMyComment(cId, cToken, btn);
+                        });
+                    });
+
                 } else {
-                    commentsList.innerHTML = '<div class="empty-state" style="padding: 1.5rem; font-size: 0.95rem;">هنوز دیدگاهی برای این مطلب ثبت نشده است. اولین نفر باشید!</div>';
+                    commentsList.innerHTML = '<div class="empty-state" style="padding: 1.5rem; font-size: 0.95rem;">هنوز دیدگاهی برای این مطلب ثبت نشده‌است. اولین نفر باشید!</div>';
                 }
             } catch (error) {
                 console.error("Error loading comments:", error);
@@ -438,7 +511,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (!nameVal || !textVal) return;
 
-                // UI Loading State
                 submitBtn.disabled = true;
                 submitBtn.innerText = 'در حال ارسال...';
                 submitBtn.style.opacity = '0.7';
@@ -453,18 +525,24 @@ document.addEventListener('DOMContentLoaded', () => {
                             url: currentPath,
                             name: nameVal,
                             text: textVal,
-                            parentId: currentReplyParentId // Send the parent ID if it's a reply
+                            parentId: currentReplyParentId 
                         })
                     });
 
                     if (!response.ok) throw new Error("Failed to send comment");
+                    const resData = await response.json();
 
-                    // Success UI
+                    // Save Delete Token for future reference
+                    if (resData.success && resData.deleteToken && resData.id) {
+                        let myComs = getMyComments();
+                        myComs.push({ id: resData.id, token: resData.deleteToken });
+                        localStorage.setItem('asb_comments', JSON.stringify(myComs));
+                    }
+
                     commentStatusMsg.innerText = 'دیدگاه شما با موفقیت ارسال شد و پس از تأیید نمایش داده می‌شود.';
                     commentStatusMsg.classList.add('success');
                     commentForm.reset();
                     
-                    // Reset Reply State
                     currentReplyParentId = null;
                     const badge = document.getElementById('replying-badge');
                     if(badge) badge.remove();
@@ -474,7 +552,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     commentStatusMsg.innerText = 'خطا در ارسال دیدگاه. لطفاً اتصال اینترنت را بررسی کنید.';
                     commentStatusMsg.classList.add('error');
                 } finally {
-                    // Reset Button State
                     submitBtn.disabled = false;
                     submitBtn.innerText = 'ثبت دیدگاه';
                     submitBtn.style.opacity = '1';
