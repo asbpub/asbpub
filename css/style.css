@@ -459,6 +459,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
     font-size: 1.1rem; color: var(--text-secondary); 
     font-weight: 700; font-family: inherit; 
 }
+.interaction-count { font-family: var(--font-primary); font-variant-numeric: tabular-nums; }
 .interaction-btn { cursor: pointer; transition: all var(--transition-fast); }
 .interaction-btn svg, .interaction-item svg { width: 24px; height: 24px; }
 .interaction-btn:hover, .interaction-btn:focus-visible { color: var(--clr-red); transform: translateY(-2px); outline: none;}
@@ -475,11 +476,24 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 
 .comment-form-wrapper { 
     background: var(--bg-body); padding: 2rem; border-radius: 12px; 
-    margin-bottom: 3rem; border: 1px solid var(--border-subtle); 
+    margin-bottom: 3rem; border: 1px solid var(--border-subtle); position: relative;
 }
 .comment-status-msg { margin-top: 1rem; font-size: 0.95rem; font-weight: 700; display: none; text-align: center; }
 .comment-status-msg.success { color: #2E7D32; display: block; }
 .comment-status-msg.error { color: var(--clr-red); display: block; }
+
+/* Reply UI specific styles */
+.replying-badge { 
+    background: rgba(52, 170, 225, 0.1); color: var(--clr-blue); 
+    padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.95rem; 
+    font-weight: 700; margin-bottom: 1.5rem; display: none; 
+    align-items: center; justify-content: space-between; 
+}
+.replying-badge.active { display: flex; animation: fadeUp 0.3s ease forwards; }
+.cancel-reply { 
+    cursor: pointer; color: var(--clr-red); border: none; 
+    background: none; font-weight: 700; font-size: 0.85rem; padding: 0.2rem 0.5rem; 
+}
 
 .comments-list { display: flex; flex-direction: column; gap: 1.5rem; }
 .comment-item { 
@@ -491,8 +505,23 @@ textarea.form-control { resize: vertical; min-height: 140px; }
     margin-bottom: 1rem; border-bottom: 1px dashed var(--border-subtle); padding-bottom: 0.8rem; 
 }
 .comment-author { font-weight: 800; color: var(--text-primary); font-size: 1.05rem; }
-.comment-date { font-size: 0.85rem; color: var(--text-secondary); }
+.comment-date { font-size: 0.85rem; color: var(--text-secondary); font-family: var(--font-primary); }
 .comment-body { font-size: 0.95rem; line-height: 1.8; color: var(--text-primary); white-space: pre-wrap; }
+
+/* Reply Button inside comments */
+.comment-actions { margin-top: 1.2rem; text-align: left; }
+.reply-btn { 
+    font-size: 0.85rem; color: var(--text-secondary); font-weight: 700; 
+    background: none; border: none; cursor: pointer; transition: color var(--transition-fast); 
+}
+.reply-btn:hover { color: var(--clr-blue); }
+
+/* Nested Comments */
+.nested-comments { 
+    margin-top: 1.5rem; margin-right: 1.5rem; 
+    border-right: 2px solid var(--border-subtle); padding-right: 1.5rem; 
+    display: flex; flex-direction: column; gap: 1.5rem; 
+}
 
 /* Admin Reply Design */
 .comment-reply { 
@@ -500,9 +529,10 @@ textarea.form-control { resize: vertical; min-height: 140px; }
     border-right: 3px solid var(--clr-ochre); border-radius: 8px 0 0 8px; 
 }
 .reply-author { 
-    font-weight: 800; color: var(--clr-ochre); font-size: 0.9rem; 
-    margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem; 
+    font-weight: 800; color: var(--clr-ochre); font-size: 0.95rem; 
+    margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; 
 }
+.reply-author svg { width: 18px; height: 18px; }
 
 /* ==========================================================================
    Footer
@@ -620,6 +650,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
     
     /* Comments mobile fix */
     .comment-form-wrapper { padding: 1.5rem; }
+    .nested-comments { margin-right: 0.8rem; padding-right: 0.8rem; }
     
     /* Search box mobile fix */
     .inline-search-container { padding: 0 1rem; }
