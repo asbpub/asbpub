@@ -28,9 +28,9 @@
    Scrollbar Customization
    ========================================================================== */
 ::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-body); }
-::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--clr-ochre); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #B8860B; }
 
 /* ==========================================================================
    Resets & Foundations
