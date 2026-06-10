@@ -4,8 +4,10 @@
 :root {
     --font-primary: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     
-    --bg-body: #FCFAF8;       
-    --bg-surface: #FFFFFF;    
+    /* Elegant Paper-like Backgrounds for reading comfort (Reduced pure white) */
+    --bg-body: #F5F3EC;       
+    --bg-surface: #FCFBF8;    
+    
     --text-primary: #1A1A1A;  
     --text-secondary: #5C5C5C;
     --border-subtle: rgba(0, 0, 0, 0.08);
@@ -85,7 +87,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
    ========================================================================== */
 .smart-header {
     position: sticky; top: 0; left: 0; width: 100%;
-    background-color: #FDFBF2; 
+    background-color: var(--bg-surface); 
     z-index: 1000;
     transition: transform var(--transition-slow), box-shadow var(--transition-slow);
 }
@@ -506,7 +508,16 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 .comment-item { 
     background: var(--bg-surface); padding: 1.5rem; border-radius: 12px; 
     border: 1px solid var(--border-subtle); box-shadow: 0 2px 10px rgba(0,0,0,0.02); 
+    transition: opacity var(--transition-standard);
 }
+
+/* User's own delete button */
+.delete-own-comment-btn {
+    background: transparent; color: var(--text-secondary); border: none; cursor: pointer;
+    padding: 4px; border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition-fast); margin-right: 0.5rem; opacity: 0.5;
+}
+.delete-own-comment-btn:hover { color: var(--clr-red); background: rgba(217, 72, 72, 0.1); opacity: 1; }
 
 /* Nested Comments Styling */
 .nested-comments-wrapper {
@@ -533,15 +544,23 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 
 .comment-body { font-size: 0.95rem; line-height: 1.8; color: var(--text-primary); white-space: pre-wrap; }
 
-/* Admin Reply Design */
+/* Official Replies Design (Admin, Author, Translator) */
 .comment-reply { 
-    margin-top: 1.5rem; padding: 1.2rem; background-color: rgba(212, 154, 0, 0.05); 
-    border-right: 3px solid var(--clr-ochre); border-radius: 8px 0 0 8px; 
+    margin-top: 1.5rem; padding: 1.2rem; border-radius: 8px 0 0 8px; 
 }
 .reply-author { 
-    font-weight: 800; color: var(--clr-ochre); font-size: 0.9rem; 
-    margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem; 
+    font-weight: 800; font-size: 0.9rem; margin-bottom: 0.8rem; 
+    display: flex; align-items: center; gap: 0.4rem; 
 }
+
+.comment-reply.admin-reply { background-color: rgba(212, 154, 0, 0.05); border-right: 3px solid var(--clr-ochre); }
+.comment-reply.admin-reply .reply-author { color: var(--clr-ochre); }
+
+.comment-reply.author-reply { background-color: rgba(52, 170, 225, 0.05); border-right: 3px solid var(--clr-blue); }
+.comment-reply.author-reply .reply-author { color: var(--clr-blue); }
+
+.comment-reply.translator-reply { background-color: rgba(217, 72, 72, 0.05); border-right: 3px solid var(--clr-red); }
+.comment-reply.translator-reply .reply-author { color: var(--clr-red); }
 
 /* ==========================================================================
    Footer
