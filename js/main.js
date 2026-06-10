@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Global Constants
     const basePath = window.ASB_BASE_PATH || '';
-    const ASB_API_URL = "https://asbpub-forms.asbpub-official.workers.dev"; // Your Cloudflare Worker URL
+    const ASB_API_URL = ""; // Your Cloudflare Worker URL
 
     // Helper: Security function to prevent XSS attacks in comments
     const escapeHTML = (str) => {
