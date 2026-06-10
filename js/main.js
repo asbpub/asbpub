@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Global Constants
     const basePath = window.ASB_BASE_PATH || '';
-    const ASB_API_URL = ""; // Your Cloudflare Worker URL
+    const ASB_API_URL = ""; // Your Cloudflare Worker URL (via Vercel Rewrite)
 
     // Helper: Security function to prevent XSS attacks in comments
     const escapeHTML = (str) => {
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 4. Story Interactions (Likes & Views Processing)
+    // 4. Story Interactions (Unique Views & Two-Way Likes)
     // ==========================================================================
     const viewCountEl = document.getElementById('view-count');
     const likeCountEl = document.getElementById('like-count');
@@ -189,21 +189,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const coverImg = document.querySelector('.story-cover');
         const storyCover = coverImg ? coverImg.src : "";
 
-        const storageKey = `liked_${currentPath}`;
-        let hasLiked = localStorage.getItem(storageKey) === 'true';
+        const likeStorageKey = `liked_${currentPath}`;
+        const viewStorageKey = `viewed_${currentPath}`;
+        
+        let hasLiked = localStorage.getItem(likeStorageKey) === 'true';
+        let hasViewed = localStorage.getItem(viewStorageKey) === 'true';
 
+        // Apply initial Like state
         if (hasLiked) {
             likeBtn.classList.add('liked');
-            likeBtn.setAttribute('aria-label', 'شما این مطلب را پسندیده‌اید');
+            likeBtn.setAttribute('aria-label', 'لغو پسندیدن');
         }
 
+        // Register View or just load stats
         const registerView = async () => {
+            // If already viewed, just get stats. Otherwise, add a view.
+            const actionType = hasViewed ? 'get_stats' : 'add_view';
+            
             try {
                 const response = await fetch(`${ASB_API_URL}/api/view`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        url: currentPath, title: storyTitle, author: storyAuthor, cover: storyCover, date: storyDate
+                        url: currentPath, title: storyTitle, author: storyAuthor, cover: storyCover, date: storyDate,
+                        action: actionType
                     })
                 });
                 
@@ -211,6 +220,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const stats = await response.json();
                     viewCountEl.innerText = toPersianDigits(stats.views || 0);
                     likeCountEl.innerText = toPersianDigits(stats.likes || 0);
+                    
+                    if (actionType === 'add_view') {
+                        localStorage.setItem(viewStorageKey, 'true');
+                    }
                 }
             } catch (error) {
                 console.error("Failed to register view/fetch stats:", error);
@@ -221,33 +234,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
         registerView();
 
+        // Handle Two-Way Like Button Click
         likeBtn.addEventListener('click', async () => {
-            if (hasLiked) return; 
+            const isCurrentlyLiked = likeBtn.classList.contains('liked');
+            const action = isCurrentlyLiked ? 'unlike' : 'like';
             
-            hasLiked = true;
-            localStorage.setItem(storageKey, 'true');
-            likeBtn.classList.add('liked');
-            likeBtn.setAttribute('aria-label', 'شما این مطلب را پسندیده‌اید');
+            // 1. Optimistic UI Update (Instant visual feedback)
+            if (action === 'like') {
+                localStorage.setItem(likeStorageKey, 'true');
+                likeBtn.classList.add('liked');
+                likeBtn.setAttribute('aria-label', 'لغو پسندیدن');
+            } else {
+                localStorage.removeItem(likeStorageKey);
+                likeBtn.classList.remove('liked');
+                likeBtn.setAttribute('aria-label', 'پسندیدن این مطلب');
+            }
             
+            // Parse current persian likes to english, modify, then back to persian
             let currentLikesStr = likeCountEl.innerText;
             let currentLikesEng = currentLikesStr.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
             let currentLikes = parseInt(currentLikesEng) || 0;
             
-            likeCountEl.innerText = toPersianDigits(currentLikes + 1);
+            let newLikes = action === 'like' ? currentLikes + 1 : Math.max(0, currentLikes - 1);
+            likeCountEl.innerText = toPersianDigits(newLikes);
 
+            // 2. Send request to Cloudflare
             try {
                 await fetch(`${ASB_API_URL}/api/like`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        url: currentPath, title: storyTitle, author: storyAuthor, cover: storyCover, date: storyDate
+                        url: currentPath, title: storyTitle, author: storyAuthor, cover: storyCover, date: storyDate,
+                        action: action
                     })
                 });
             } catch (error) {
-                console.error("Failed to register like:", error);
-                hasLiked = false;
-                localStorage.removeItem(storageKey);
-                likeBtn.classList.remove('liked');
+                console.error("Failed to register like/unlike:", error);
+                // Revert UI on failure
+                if (action === 'like') {
+                    localStorage.removeItem(likeStorageKey);
+                    likeBtn.classList.remove('liked');
+                } else {
+                    localStorage.setItem(likeStorageKey, 'true');
+                    likeBtn.classList.add('liked');
+                }
                 likeCountEl.innerText = toPersianDigits(currentLikes);
             }
         });
@@ -318,13 +348,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (commentsList) {
         
-        // Helper: Get user's own comments from LocalStorage
         const getMyComments = () => {
             try { return JSON.parse(localStorage.getItem('asb_comments')) || []; } 
             catch (e) { return []; }
         };
 
-        // Helper: Delete comment request
         const deleteMyComment = async (commentId, token, btnEl) => {
             if (!confirm("آیا از حذف دیدگاه خود مطمئن هستید؟")) return;
             
@@ -339,13 +367,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (res.ok) {
-                    // Remove from UI
                     const cItem = document.getElementById(`comment-${commentId}`);
                     if (cItem) {
                         cItem.style.opacity = '0.3';
                         setTimeout(() => cItem.remove(), 500);
                     }
-                    // Remove from LocalStorage
                     let myComs = getMyComments();
                     myComs = myComs.filter(c => c.id !== commentId);
                     localStorage.setItem('asb_comments', JSON.stringify(myComs));
@@ -361,10 +387,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         
-        // Helper to render a single comment block
         const renderCommentHtml = (comment, isReply = false) => {
             
-            // Official Replies (Admin, Author, Translator)
             let officialRepliesHtml = '';
             if (comment.replies) {
                 if (comment.replies.admin) {
@@ -390,7 +414,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // User Self-Delete Button
             const myComments = getMyComments();
             const myComData = myComments.find(c => c.id === comment.id);
             const deleteBtnHtml = myComData ? `
@@ -450,7 +473,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     commentsList.innerHTML = commentsHtml;
 
-                    // Attach Reply Listeners
                     document.querySelectorAll('.reply-btn').forEach(btn => {
                         btn.addEventListener('click', () => {
                             currentReplyParentId = btn.getAttribute('data-id');
@@ -477,7 +499,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     });
 
-                    // Attach Delete Listeners
                     document.querySelectorAll('.delete-own-comment-btn').forEach(btn => {
                         btn.addEventListener('click', () => {
                             const cId = btn.getAttribute('data-id');
@@ -497,7 +518,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loadComments();
 
-        // Handle Comment Form Submission
         if (commentForm) {
             commentForm.addEventListener('submit', async (e) => {
                 e.preventDefault(); 
@@ -532,7 +552,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!response.ok) throw new Error("Failed to send comment");
                     const resData = await response.json();
 
-                    // Save Delete Token for future reference
                     if (resData.success && resData.deleteToken && resData.id) {
                         let myComs = getMyComments();
                         myComs.push({ id: resData.id, token: resData.deleteToken });
