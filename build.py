@@ -35,8 +35,33 @@ home_template = env.get_template(HOME_TEMPLATE_NAME)
 
 md_processor = markdown.Markdown(extensions=['extra', 'tables'])
 
+# --- Helper Functions ---
 def is_english(text: str) -> bool:
     return bool(re.search(r'[a-zA-Z]', text))
+
+def format_persian_date(date_str: str) -> str:
+    """Converts YYYY/MM/DD to beautiful Persian date format with FA digits."""
+    if not date_str or '/' not in str(date_str):
+        return str(date_str)
+    
+    months = {
+        '01': 'فروردین', '1': 'فروردین', '02': 'اردیبهشت', '2': 'اردیبهشت',
+        '03': 'خرداد', '3': 'خرداد', '04': 'تیر', '4': 'تیر',
+        '05': 'مرداد', '5': 'مرداد', '06': 'شهریور', '6': 'شهریور',
+        '07': 'مهر', '7': 'مهر', '08': 'آبان', '8': 'آبان',
+        '09': 'آذر', '9': 'آذر', '10': 'دی', '11': 'بهمن', '12': 'اسفند'
+    }
+    
+    # Translate English digits to Persian digits
+    en_to_fa = str.maketrans('0123456789', '۰۱۲۳۴۵۶۷۸۹')
+    
+    parts = str(date_str).split('/')
+    if len(parts) == 3:
+        year, month, day = parts
+        month_name = months.get(month, month)
+        return f"{day.translate(en_to_fa)} {month_name} {year.translate(en_to_fa)}"
+    
+    return str(date_str).translate(en_to_fa)
 
 def build_site() -> None:
     print("Starting build process for ASB Publishing...")
@@ -61,7 +86,8 @@ def build_site() -> None:
             author = post.get('author', '')
             translator = post.get('translator', '')
             cover = post.get('cover', '')
-            date = post.get('date', '') 
+            date = str(post.get('date', ''))
+            formatted_date = format_persian_date(date)
             
             tags = post.get('tags', [])
             if isinstance(tags, str):
@@ -110,6 +136,7 @@ def build_site() -> None:
                 'url': rel_path_to_post_from_root,
                 'cover': rel_path_to_cover_from_root,
                 'date': date,
+                'formatted_date': formatted_date,
                 'category': category 
             }
             
@@ -140,6 +167,7 @@ def build_site() -> None:
                     'url': rel_path_to_post,
                     'cover': rel_path_to_cover,
                     'date': date,
+                    'formatted_date': formatted_date,
                     'category': category
                 })
                 
@@ -162,6 +190,7 @@ def build_site() -> None:
                     'url': tag_rel_url,
                     'cover': tag_rel_cover,
                     'date': date,
+                    'formatted_date': formatted_date,
                     'category': category 
                 })
                     
@@ -171,9 +200,16 @@ def build_site() -> None:
     # --- Generate Homepage ---
     try:
         all_posts.sort(key=lambda x: x['date'], reverse=True)
-        latest_posts = all_posts[:6]
         
-        final_home = home_template.render(latest_posts=latest_posts, base_path='')
+        # Split stories (Newest) and articles (Magazine) for the homepage
+        latest_stories = [p for p in all_posts if p['category'] != 'articles'][:6]
+        latest_articles = [p for p in all_posts if p['category'] == 'articles'][:6]
+        
+        final_home = home_template.render(
+            latest_posts=latest_stories, 
+            latest_articles=latest_articles,
+            base_path=''
+        )
         with open('index.html', 'w', encoding='utf-8') as f:
             f.write(final_home)
     except Exception as e:
