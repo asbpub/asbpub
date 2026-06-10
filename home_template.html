@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="نشر اسب | به‌سوی دورها بر زین کلمات.">
-    <title>نشر اسب | سر در پی افق‌ها</title>
-    
+    <meta name="description" content="بایگانی {{ section_title }} در نشر اسب.">
+    <title>{{ section_title }} | نشر اسب</title>
+
     <!-- Google Search Console Verification -->
     <meta name="google-site-verification" content="hHlYCoOa9y4FMyctEhX-zXD5T6JLBfEiVXu-eVFrKq0" />
     
@@ -34,14 +34,14 @@
     <!-- Open Graph / Telegram & Social Media -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.asbpub.ir/">
-    <meta property="og:title" content="نشر اسب | سر در پی افق‌ها">
-    <meta property="og:description" content="نشر اسب | به‌سوی دورها بر زین کلمات.">
+    <meta property="og:title" content="{{ section_title }} | نشر اسب">
+    <meta property="og:description" content="بایگانی {{ section_title }} در نشر اسب.">
     <meta property="og:image" content="https://www.asbpub.ir/asbsocial.png">
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="نشر اسب | سر در پی افق‌ها">
-    <meta name="twitter:description" content="نشر اسب | به‌سوی دورها بر زین کلمات.">
+    <meta name="twitter:title" content="{{ section_title }} | نشر اسب">
+    <meta name="twitter:description" content="بایگانی {{ section_title }} در نشر اسب.">
     <meta name="twitter:image" content="https://www.asbpub.ir/asbsocial.png">
 </head>
 <body>
@@ -77,37 +77,37 @@
             </button>
 
             <div class="nav-links" id="nav-links-menu">
-                <a href="{{ base_path }}index.html" class="nav-item active" aria-current="page">
+                <a href="{{ base_path }}index.html" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     <span class="nav-label">خانه</span>
                 </a>
                 
-                <a href="{{ base_path }}main/novels/index.html" class="nav-item">
+                <a href="{{ base_path }}main/novels/index.html" class="nav-item {% if category == 'novels' %}active{% endif %}" {% if category == 'novels' %}aria-current="page"{% endif %}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
                     <span class="nav-label">رمان</span>
                 </a>
                 
-                <a href="{{ base_path }}main/shortstories/index.html" class="nav-item">
+                <a href="{{ base_path }}main/shortstories/index.html" class="nav-item {% if category == 'shortstories' %}active{% endif %}" {% if category == 'shortstories' %}aria-current="page"{% endif %}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon" aria-hidden="true"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>
                     <span class="nav-label">داستان کوتاه</span>
                 </a>
                 
-                <a href="{{ base_path }}main/flashfictions/index.html" class="nav-item">
+                <a href="{{ base_path }}main/flashfictions/index.html" class="nav-item {% if category == 'flashfictions' %}active{% endif %}" {% if category == 'flashfictions' %}aria-current="page"{% endif %}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                     <span class="nav-label">داستان برق‌آسا</span>
                 </a>
                 
-                <a href="{{ base_path }}main/articles/index.html" class="nav-item">
+                <a href="{{ base_path }}main/articles/index.html" class="nav-item {% if category == 'articles' %}active{% endif %}" {% if category == 'articles' %}aria-current="page"{% endif %}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                     <span class="nav-label">مجله‌ی اسب</span>
                 </a>
 
-                <a href="{{ base_path }}main/creators/index.html" class="nav-item">
+                <a href="{{ base_path }}main/creators/index.html" class="nav-item {% if category == 'creators' %}active{% endif %}" {% if category == 'creators' %}aria-current="page"{% endif %}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                     <span class="nav-label">پدیدآورندگان</span>
                 </a>
 
-                <a href="{{ base_path }}main/about/index.html" class="nav-item">
+                <a href="{{ base_path }}main/about/index.html" class="nav-item {% if category == 'about' %}active{% endif %}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                     <span class="nav-label">درباره‌ی ما</span>
                 </a>
@@ -117,104 +117,73 @@
 
     <!-- Main Content Area -->
     <main role="main" class="page-content" id="main-content">
-        
-        <!-- Inline Smart Search -->
-        <div class="inline-search-container">
-            <div class="search-input-wrapper">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="inline-search-input" placeholder="جست‌وجو در نام داستان، نویسنده، ژانر…" autocomplete="off">
-            </div>
-            <div id="search-dropdown" class="search-dropdown">
-                <ul id="search-results-list"></ul>
-            </div>
-        </div>
-
-        <!-- Section 1: Newest Stories -->
-        <section id="newest-stories" class="landing-section">
+        <section class="landing-section">
             <div class="container">
-                <div class="category-group-header" style="justify-content: center; margin-bottom: 2.5rem; border-bottom: none; color: var(--clr-blue);">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    <h2 class="section-title" style="margin-bottom: 0;">جدیدترین‌ها</h2>
+                
+                <!-- Improved accessibility: Always show H1 for archive pages -->
+                <h1 class="archive-headline">{{ section_title }}</h1>
+                
+                {% if posts %}
+                    {% if is_tag_page %}
+                        <!-- Grouped view for Tag pages -->
+                        {% for cat_id, cat_posts in posts | groupby('category') %}
+                        <div class="category-group">
+                            <div class="category-group-header cat-{{ cat_id }}">
+                                {% if cat_id == 'flashfictions' %}
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                {% elif cat_id == 'novels' %}
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                                {% elif cat_id == 'shortstories' %}
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>
+                                {% elif cat_id == 'articles' %}
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                {% endif %}
+                            </div>
+                            <div class="content-grid" style="margin-top: 0;">
+                                {% for post in cat_posts %}
+                                <article class="post-card">
+                                    <a href="{{ post.url }}">
+                                        {% if post.cover %}
+                                        <img src="{{ post.cover }}" alt="جلد اثر: {{ post.title }}" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
+                                        {% endif %}
+                                        <h3 class="post-title">{{ post.title }}</h3>
+                                        <span class="post-author">{{ post.author }}</span>
+                                        {% if post.formatted_date %}
+                                        <time class="post-date" datetime="{{ post.date }}">{{ post.formatted_date }}</time>
+                                        {% endif %}
+                                    </a>
+                                </article>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Standard view for Category archives -->
+                        <div class="content-grid">
+                            {% for post in posts %}
+                            <article class="post-card">
+                                <a href="{{ post.url }}">
+                                    {% if post.cover %}
+                                    <img src="{{ post.cover }}" alt="جلد اثر: {{ post.title }}" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
+                                    {% endif %}
+                                    <h3 class="post-title">{{ post.title }}</h3>
+                                    <span class="post-author">{{ post.author }}</span>
+                                    {% if post.formatted_date %}
+                                    <time class="post-date" datetime="{{ post.date }}">{{ post.formatted_date }}</time>
+                                    {% endif %}
+                                </a>
+                            </article>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                <div class="empty-state">
+                    <p>در دست ساخت…</p>
                 </div>
+                {% endif %}
 
-                <div class="content-grid" style="margin-top: 0;">
-                    {% for post in latest_posts %}
-                    <article class="post-card">
-                        <a href="{{ post.url }}">
-                            {% if post.cover %}
-                            <img src="{{ post.cover }}" alt="جلد اثر: {{ post.title }}" class="post-cover" width="85" height="85" loading="lazy" decoding="async">
-                            {% endif %}
-                            <h3 class="post-title">{{ post.title }}</h3>
-                            <span class="post-author">{{ post.author }}</span>
-                            {% if post.formatted_date %}
-                            <time class="post-date" datetime="{{ post.date }}">{{ post.formatted_date }}</time>
-                            {% endif %}
-                        </a>
-                    </article>
-                    {% endfor %}
-                </div>
             </div>
         </section>
-
-        <!-- Section 2: Most Viewed (Skeleton ready for Cloudflare KV) -->
-        <section id="most-viewed-section" class="landing-section" style="background-color: #FDFBF2; border-top: 1px dashed var(--border-subtle); border-bottom: 1px dashed var(--border-subtle);">
-            <div class="container">
-                <div class="category-group-header" style="justify-content: center; margin-bottom: 2.5rem; border-bottom: none; color: var(--clr-ochre);">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                    <h2 class="section-title" style="margin-bottom: 0;">پُربازدیدترین‌ها</h2>
-                </div>
-
-                <div id="most-viewed-container" class="content-grid" style="margin-top: 0;" aria-live="polite">
-                    <div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;">
-                        <p>در حال بارگذاری آمار...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: Most Liked (Skeleton ready for Cloudflare KV) -->
-        <section id="most-liked-section" class="landing-section">
-            <div class="container">
-                <div class="category-group-header" style="justify-content: center; margin-bottom: 2.5rem; border-bottom: none; color: var(--clr-red);">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                    <h2 class="section-title" style="margin-bottom: 0;">محبوب‌ترین‌ها</h2>
-                </div>
-
-                <div id="most-liked-container" class="content-grid" style="margin-top: 0;" aria-live="polite">
-                    <div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;">
-                        <p>در حال بارگذاری آمار...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 4: Latest Magazine Articles -->
-        <section id="latest-articles-section" class="landing-section" style="background-color: #0F0F11; color: #FFFFFF;">
-            <div class="container">
-                <div class="category-group-header" style="justify-content: center; margin-bottom: 2.5rem; border-bottom: none; color: var(--clr-ochre);">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                    <h2 class="section-title" style="margin-bottom: 0; color: #FFFFFF;">آخرین نوشته‌های مجله‌ی اسب</h2>
-                </div>
-
-                <div class="content-grid" style="margin-top: 0;">
-                    {% for post in latest_articles %}
-                    <article class="post-card" style="background-color: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1);">
-                        <a href="{{ post.url }}">
-                            {% if post.cover %}
-                            <img src="{{ post.cover }}" alt="جلد مقاله: {{ post.title }}" class="post-cover" width="85" height="85" loading="lazy" decoding="async" style="box-shadow: none; border: 1px solid rgba(255,255,255,0.1);">
-                            {% endif %}
-                            <h3 class="post-title" style="color: #FFFFFF;">{{ post.title }}</h3>
-                            <span class="post-author" style="color: #AAAAAA;">{{ post.author }}</span>
-                            {% if post.formatted_date %}
-                            <time class="post-date" datetime="{{ post.date }}" style="color: var(--clr-ochre);">{{ post.formatted_date }}</time>
-                            {% endif %}
-                        </a>
-                    </article>
-                    {% endfor %}
-                </div>
-            </div>
-        </section>
-
     </main>
 
     <!-- Main Footer -->
@@ -257,19 +226,19 @@
                     </div>
                 </div>
             </div>
-
+            
             <!-- Bottom Section: Copyright -->
             <div class="footer-bottom">
                 <small class="footer-copy">© ۱۴۰۵، تمام حقوق برای نشر اسب محفوظ است.</small>
             </div>
         </div>
     </footer>
-    
+
     <!-- Back to Top Button -->
     <button id="back-to-top" class="back-to-top-btn" aria-label="بازگشت به بالای صفحه">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
     </button>
-    
+
     <!-- Base Path & Scripts -->
     <script>window.ASB_BASE_PATH = "{{ base_path }}";</script>
     <script src="{{ base_path }}js/main.js"></script>
