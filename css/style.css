@@ -624,3 +624,9 @@ textarea.form-control { resize: vertical; min-height: 140px; }
     /* Search box mobile fix */
     .inline-search-container { padding: 0 1rem; }
 }
+
+/* Animation for JS loaded cards */
+.fade-in-up { 
+    opacity: 0; 
+    animation: fadeUp 0.6s ease forwards; 
+}
