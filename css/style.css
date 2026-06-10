@@ -170,6 +170,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
     border-bottom: 1px dashed var(--border-subtle);
     line-height: 1.6;
     word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .hero-subtext { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
@@ -457,9 +458,8 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 .interaction-item, .interaction-btn { 
     display: flex; align-items: center; gap: 0.5rem; 
     font-size: 1.1rem; color: var(--text-secondary); 
-    font-weight: 700; font-family: inherit; 
+    font-weight: 700; font-family: var(--font-primary); 
 }
-.interaction-count { font-family: var(--font-primary); font-variant-numeric: tabular-nums; }
 .interaction-btn { cursor: pointer; transition: all var(--transition-fast); }
 .interaction-btn svg, .interaction-item svg { width: 24px; height: 24px; }
 .interaction-btn:hover, .interaction-btn:focus-visible { color: var(--clr-red); transform: translateY(-2px); outline: none;}
@@ -476,52 +476,62 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 
 .comment-form-wrapper { 
     background: var(--bg-body); padding: 2rem; border-radius: 12px; 
-    margin-bottom: 3rem; border: 1px solid var(--border-subtle); position: relative;
+    margin-bottom: 3rem; border: 1px solid var(--border-subtle); 
 }
 .comment-status-msg { margin-top: 1rem; font-size: 0.95rem; font-weight: 700; display: none; text-align: center; }
 .comment-status-msg.success { color: #2E7D32; display: block; }
 .comment-status-msg.error { color: var(--clr-red); display: block; }
 
-/* Reply UI specific styles */
-.replying-badge { 
-    background: rgba(52, 170, 225, 0.1); color: var(--clr-blue); 
-    padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.95rem; 
-    font-weight: 700; margin-bottom: 1.5rem; display: none; 
-    align-items: center; justify-content: space-between; 
+/* Replying Badge UI */
+.replying-badge {
+    background: rgba(212, 154, 0, 0.08);
+    border: 1px dashed var(--clr-ochre);
+    color: var(--text-primary);
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    animation: fadeUp 0.3s ease;
 }
-.replying-badge.active { display: flex; animation: fadeUp 0.3s ease forwards; }
-.cancel-reply { 
-    cursor: pointer; color: var(--clr-red); border: none; 
-    background: none; font-weight: 700; font-size: 0.85rem; padding: 0.2rem 0.5rem; 
+.replying-badge button {
+    color: var(--clr-red); font-weight: 700; font-size: 0.85rem; padding: 0.3rem 0.6rem;
+    background: rgba(217, 72, 72, 0.1); border-radius: 4px; transition: all var(--transition-fast);
 }
+.replying-badge button:hover { background: var(--clr-red); color: #FFF; }
 
 .comments-list { display: flex; flex-direction: column; gap: 1.5rem; }
 .comment-item { 
     background: var(--bg-surface); padding: 1.5rem; border-radius: 12px; 
     border: 1px solid var(--border-subtle); box-shadow: 0 2px 10px rgba(0,0,0,0.02); 
 }
+
+/* Nested Comments Styling */
+.nested-comments-wrapper {
+    margin-right: 2rem; padding-right: 1.5rem; border-right: 2px solid var(--border-subtle);
+    display: flex; flex-direction: column; gap: 1rem; margin-top: -0.5rem; margin-bottom: 1.5rem;
+}
+.nested-comment { background-color: var(--bg-body); padding: 1.2rem; }
+
 .comment-header { 
-    display: flex; justify-content: space-between; align-items: center; 
+    display: flex; justify-content: space-between; align-items: flex-start; 
     margin-bottom: 1rem; border-bottom: 1px dashed var(--border-subtle); padding-bottom: 0.8rem; 
 }
+.comment-meta { display: flex; flex-direction: column; gap: 0.3rem; }
 .comment-author { font-weight: 800; color: var(--text-primary); font-size: 1.05rem; }
-.comment-date { font-size: 0.85rem; color: var(--text-secondary); font-family: var(--font-primary); }
+.comment-date { font-size: 0.85rem; color: var(--text-secondary); }
+
+/* Reply Button */
+.reply-btn {
+    font-size: 0.8rem; color: var(--clr-blue); background: rgba(52, 170, 225, 0.1);
+    padding: 0.3rem 0.8rem; border-radius: 20px; transition: all var(--transition-fast);
+    display: flex; align-items: center; gap: 0.3rem; font-weight: 700;
+}
+.reply-btn:hover { background: var(--clr-blue); color: #FFF; }
+
 .comment-body { font-size: 0.95rem; line-height: 1.8; color: var(--text-primary); white-space: pre-wrap; }
-
-/* Reply Button inside comments */
-.comment-actions { margin-top: 1.2rem; text-align: left; }
-.reply-btn { 
-    font-size: 0.85rem; color: var(--text-secondary); font-weight: 700; 
-    background: none; border: none; cursor: pointer; transition: color var(--transition-fast); 
-}
-.reply-btn:hover { color: var(--clr-blue); }
-
-/* Nested Comments */
-.nested-comments { 
-    margin-top: 1.5rem; margin-right: 1.5rem; 
-    border-right: 2px solid var(--border-subtle); padding-right: 1.5rem; 
-    display: flex; flex-direction: column; gap: 1.5rem; 
-}
 
 /* Admin Reply Design */
 .comment-reply { 
@@ -529,10 +539,9 @@ textarea.form-control { resize: vertical; min-height: 140px; }
     border-right: 3px solid var(--clr-ochre); border-radius: 8px 0 0 8px; 
 }
 .reply-author { 
-    font-weight: 800; color: var(--clr-ochre); font-size: 0.95rem; 
-    margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; 
+    font-weight: 800; color: var(--clr-ochre); font-size: 0.9rem; 
+    margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem; 
 }
-.reply-author svg { width: 18px; height: 18px; }
 
 /* ==========================================================================
    Footer
@@ -648,11 +657,9 @@ textarea.form-control { resize: vertical; min-height: 140px; }
     .icon-btn { width: 40px; height: 40px; }
     .icon-btn svg { width: 18px; height: 18px; }
     
-    /* Comments mobile fix */
     .comment-form-wrapper { padding: 1.5rem; }
-    .nested-comments { margin-right: 0.8rem; padding-right: 0.8rem; }
+    .nested-comments-wrapper { margin-right: 1rem; padding-right: 1rem; }
     
-    /* Search box mobile fix */
     .inline-search-container { padding: 0 1rem; }
 }
 
