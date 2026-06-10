@@ -180,7 +180,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 .section-title { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; position: relative; display: inline-block; }
 .section-title::after {
     content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
-    width: 40px; height: 3px; background-color: var(--clr-ochre); border-radius: 2px;
+    width: 40px; height: 3px; background-color: currentColor; border-radius: 2px;
 }
 
 @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
