@@ -4,7 +4,7 @@ author: کورت وانه‌گات
 translator: امیرمحمد شیرازیان
 category: shortstories
 date: ۱۴۰۵/۰۳/۲۱
-cover: harrison-bergeron-cover
+cover: harrison-bergeron-cover.jpg
 image: kurtvonnegut.webp
 tags: [Kurt Vonnegut, Harrison Bergeron, کورت وانه‌گات, امیرمحمد شیرازیان, علمی‌تخیلی, پادآرمان‌شهر]
 ---
