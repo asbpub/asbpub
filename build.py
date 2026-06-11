@@ -87,14 +87,36 @@ def build_site() -> None:
             translator = post.get('translator', '')
             
             # --- Smart Cover & Author Image Logic ---
-            raw_cover = post.get('cover', '')
-            raw_image = post.get('image', '')
+            raw_cover = str(post.get('cover', '')).strip()
+            raw_image = str(post.get('image', '')).strip()
             
-            # Fallback Logic:
-            # If a post only has an 'image' (e.g., flashfictions), use it as 'cover' too.
-            # If a post only has a 'cover' (older posts), use it as 'image' too.
-            cover = raw_cover if raw_cover else raw_image
-            image = raw_image if raw_image else raw_cover
+            cover_abs = None
+            if raw_cover:
+                # Cover is always inside the story folder by default
+                cover_abs = (md_path.parent / raw_cover).resolve()
+                
+            image_abs = None
+            if raw_image:
+                # Author image is outside the story folder (one level up) by default
+                if raw_image.startswith('../'):
+                    image_abs = (md_path.parent / raw_image).resolve()
+                else:
+                    image_abs = (md_path.parent.parent / raw_image).resolve()
+                    
+            # Fallbacks: if one is missing, fallback to the other gracefully
+            if not cover_abs and image_abs:
+                cover_abs = image_abs
+            if not image_abs and cover_abs:
+                image_abs = cover_abs
+                
+            # Prepare clean relative paths specifically for the Jinja HTML rendering
+            template_cover = ''
+            if cover_abs:
+                template_cover = os.path.relpath(cover_abs, md_path.parent).replace('\\', '/')
+                
+            template_image = ''
+            if image_abs:
+                template_image = os.path.relpath(image_abs, md_path.parent).replace('\\', '/')
             
             date = str(post.get('date', ''))
             formatted_date = format_persian_date(date)
@@ -117,8 +139,8 @@ def build_site() -> None:
                 title=title,
                 author=author,
                 translator=translator,
-                cover=cover,
-                image=image, # Passing author image separately for Jinja
+                cover=template_cover,
+                image=template_image,
                 tags_fa=tags_fa,
                 tags_en=tags_en,
                 category=category,
@@ -137,13 +159,11 @@ def build_site() -> None:
             sitemap_urls.append(rel_path_to_post_from_root)
             
             rel_path_to_cover_from_root = ''
-            if cover:
-                cover_abs = (md_path.parent / cover).resolve()
+            if cover_abs:
                 rel_path_to_cover_from_root = os.path.relpath(cover_abs, root_abs).replace('\\', '/')
 
             rel_path_to_image_from_root = ''
-            if image:
-                image_abs = (md_path.parent / image).resolve()
+            if image_abs:
                 rel_path_to_image_from_root = os.path.relpath(image_abs, root_abs).replace('\\', '/')
                 
             post_data = {
@@ -175,11 +195,11 @@ def build_site() -> None:
                 rel_path_to_post = os.path.relpath(html_abs, cat_dir_abs).replace('\\', '/')
                 
                 rel_path_to_cover = ''
-                if cover:
+                if cover_abs:
                     rel_path_to_cover = os.path.relpath(cover_abs, cat_dir_abs).replace('\\', '/')
                     
                 rel_path_to_image = ''
-                if image:
+                if image_abs:
                     rel_path_to_image = os.path.relpath(image_abs, cat_dir_abs).replace('\\', '/')
                     
                 categories[category].append({
@@ -203,11 +223,11 @@ def build_site() -> None:
                 tag_rel_url = os.path.relpath(html_abs, tag_dir_abs).replace('\\', '/')
                 
                 tag_rel_cover = ''
-                if cover:
+                if cover_abs:
                     tag_rel_cover = os.path.relpath(cover_abs, tag_dir_abs).replace('\\', '/')
                     
                 tag_rel_image = ''
-                if image:
+                if image_abs:
                     tag_rel_image = os.path.relpath(image_abs, tag_dir_abs).replace('\\', '/')
                 
                 tags_map[tag].append({
