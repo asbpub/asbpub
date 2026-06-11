@@ -591,5 +591,43 @@ const loadComments = async () => {
                 }
             });
         }
+}
     }
+
+    // ==========================================================================
+    // 7. Lightbox System for Story Cover
+    // ==========================================================================
+    const lightboxTrigger = document.querySelector('.lightbox-trigger');
+    if (lightboxTrigger) {
+        const overlay = document.createElement('div');
+        overlay.className = 'lightbox-overlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-label', 'Full screen image view');
+        
+        const img = document.createElement('img');
+        img.className = 'lightbox-img';
+        img.src = lightboxTrigger.src;
+        img.alt = lightboxTrigger.alt;
+        
+        overlay.appendChild(img);
+        document.body.appendChild(overlay);
+        
+        lightboxTrigger.addEventListener('click', () => {
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        });
+        
+        overlay.addEventListener('click', () => {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
 });
