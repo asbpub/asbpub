@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         };
 
-        const loadComments = async () => {
+const loadComments = async () => {
             try {
                 const response = await fetch(`${ASB_API_URL}/api/comments?url=${encodeURIComponent(currentPath)}`);
                 if (!response.ok) throw new Error("Failed to load comments");
@@ -455,24 +455,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 const comments = await response.json();
                 
                 if (comments.length > 0) {
-                    const rootComments = comments.filter(c => !c.parentId);
-                    const childComments = comments.filter(c => c.parentId);
-
-                    let commentsHtml = '';
-                    rootComments.forEach(root => {
-                        commentsHtml += renderCommentHtml(root, false);
-                        const children = childComments.filter(c => c.parentId === root.id);
+                    
+                    // Recursive function to build an infinite thread of nested comments
+                    const buildCommentTree = (allComments, parentId = null, depth = 0) => {
+                        let html = '';
+                        // Find direct children for the current parent
+                        const children = allComments.filter(c => (c.parentId || null) === parentId);
+                        
                         if (children.length > 0) {
-                            commentsHtml += `<div class="nested-comments-wrapper">`;
+                            // Only wrap in 'nested-comments-wrapper' if it's a reply (depth > 0)
+                            if (depth > 0) html += `<div class="nested-comments-wrapper">`;
+                            
                             children.forEach(child => {
-                                commentsHtml += renderCommentHtml(child, true);
+                                html += renderCommentHtml(child, depth > 0);
+                                // Recursively find children of this child
+                                html += buildCommentTree(allComments, child.id, depth + 1);
                             });
-                            commentsHtml += `</div>`;
+                            
+                            if (depth > 0) html += `</div>`;
                         }
-                    });
+                        return html;
+                    };
 
-                    commentsList.innerHTML = commentsHtml;
+                    // Start building the tree from root comments (parentId = null)
+                    commentsList.innerHTML = buildCommentTree(comments, null, 0);
 
+                    // Re-attach Reply Button Listeners
                     document.querySelectorAll('.reply-btn').forEach(btn => {
                         btn.addEventListener('click', () => {
                             currentReplyParentId = btn.getAttribute('data-id');
@@ -499,6 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     });
 
+                    // Re-attach Delete Button Listeners
                     document.querySelectorAll('.delete-own-comment-btn').forEach(btn => {
                         btn.addEventListener('click', () => {
                             const cId = btn.getAttribute('data-id');
@@ -515,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 commentsList.innerHTML = '<div class="empty-state" style="padding: 1.5rem; font-size: 0.95rem;">خطا در دریافت نظرات.</div>';
             }
         };
-
+        
         loadComments();
 
         if (commentForm) {
