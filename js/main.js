@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         };
 
-const loadComments = async () => {
+        const loadComments = async () => {
             try {
                 const response = await fetch(`${ASB_API_URL}/api/comments?url=${encodeURIComponent(currentPath)}`);
                 if (!response.ok) throw new Error("Failed to load comments");
@@ -456,19 +456,15 @@ const loadComments = async () => {
                 
                 if (comments.length > 0) {
                     
-                    // Recursive function to build an infinite thread of nested comments
                     const buildCommentTree = (allComments, parentId = null, depth = 0) => {
                         let html = '';
-                        // Find direct children for the current parent
                         const children = allComments.filter(c => (c.parentId || null) === parentId);
                         
                         if (children.length > 0) {
-                            // Only wrap in 'nested-comments-wrapper' if it's a reply (depth > 0)
                             if (depth > 0) html += `<div class="nested-comments-wrapper">`;
                             
                             children.forEach(child => {
                                 html += renderCommentHtml(child, depth > 0);
-                                // Recursively find children of this child
                                 html += buildCommentTree(allComments, child.id, depth + 1);
                             });
                             
@@ -477,10 +473,8 @@ const loadComments = async () => {
                         return html;
                     };
 
-                    // Start building the tree from root comments (parentId = null)
                     commentsList.innerHTML = buildCommentTree(comments, null, 0);
 
-                    // Re-attach Reply Button Listeners
                     document.querySelectorAll('.reply-btn').forEach(btn => {
                         btn.addEventListener('click', () => {
                             currentReplyParentId = btn.getAttribute('data-id');
@@ -507,7 +501,6 @@ const loadComments = async () => {
                         });
                     });
 
-                    // Re-attach Delete Button Listeners
                     document.querySelectorAll('.delete-own-comment-btn').forEach(btn => {
                         btn.addEventListener('click', () => {
                             const cId = btn.getAttribute('data-id');
@@ -591,7 +584,6 @@ const loadComments = async () => {
                 }
             });
         }
-}
     }
 
     // ==========================================================================
