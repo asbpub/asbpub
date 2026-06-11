@@ -386,7 +386,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 .story-author-image { flex-shrink: 0; margin-right: 1.5rem; }
 
 .story-cover {
-    width: 110px; 
+    width: 160px; 
     aspect-ratio: 3 / 4;
     height: auto;
     object-fit: cover; 
@@ -700,9 +700,12 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 
 @media (max-width: 768px) {
     .story-article { padding: 2rem 1.5rem; border-radius: 12px; }
-    .story-header { flex-direction: column-reverse; align-items: flex-start; gap: 1.5rem; }
+    .story-header { flex-direction: column-reverse; align-items: center; gap: 1.5rem; }
+    .story-meta-container { align-items: center; text-align: center; }
     .story-author-image { margin-right: 0; }
-    .story-title { font-size: 1.8rem; }
+    .story-cover { width: 130px; }
+    .story-title { font-size: 1.8rem; text-align: center; }
+    .story-meta { justify-content: center; }
     .story-body { font-size: 1.05rem; }
     .story-body p + p { text-indent: 1.5rem; }
     
