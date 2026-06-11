@@ -85,7 +85,17 @@ def build_site() -> None:
             title = post.get('title', 'بدون عنوان')
             author = post.get('author', '')
             translator = post.get('translator', '')
-            cover = post.get('cover', '')
+            
+            # --- Smart Cover & Author Image Logic ---
+            raw_cover = post.get('cover', '')
+            raw_image = post.get('image', '')
+            
+            # Fallback Logic:
+            # If a post only has an 'image' (e.g., flashfictions), use it as 'cover' too.
+            # If a post only has a 'cover' (older posts), use it as 'image' too.
+            cover = raw_cover if raw_cover else raw_image
+            image = raw_image if raw_image else raw_cover
+            
             date = str(post.get('date', ''))
             formatted_date = format_persian_date(date)
             
@@ -108,6 +118,7 @@ def build_site() -> None:
                 author=author,
                 translator=translator,
                 cover=cover,
+                image=image, # Passing author image separately for Jinja
                 tags_fa=tags_fa,
                 tags_en=tags_en,
                 category=category,
@@ -129,12 +140,18 @@ def build_site() -> None:
             if cover:
                 cover_abs = (md_path.parent / cover).resolve()
                 rel_path_to_cover_from_root = os.path.relpath(cover_abs, root_abs).replace('\\', '/')
+
+            rel_path_to_image_from_root = ''
+            if image:
+                image_abs = (md_path.parent / image).resolve()
+                rel_path_to_image_from_root = os.path.relpath(image_abs, root_abs).replace('\\', '/')
                 
             post_data = {
                 'title': title,
                 'author': author,
                 'url': rel_path_to_post_from_root,
                 'cover': rel_path_to_cover_from_root,
+                'image': rel_path_to_image_from_root,
                 'date': date,
                 'formatted_date': formatted_date,
                 'category': category 
@@ -156,16 +173,21 @@ def build_site() -> None:
                 cat_dir_abs = category_dir.resolve()
                 
                 rel_path_to_post = os.path.relpath(html_abs, cat_dir_abs).replace('\\', '/')
-                rel_path_to_cover = ''
                 
+                rel_path_to_cover = ''
                 if cover:
                     rel_path_to_cover = os.path.relpath(cover_abs, cat_dir_abs).replace('\\', '/')
+                    
+                rel_path_to_image = ''
+                if image:
+                    rel_path_to_image = os.path.relpath(image_abs, cat_dir_abs).replace('\\', '/')
                     
                 categories[category].append({
                     'title': title,
                     'author': author,
                     'url': rel_path_to_post,
                     'cover': rel_path_to_cover,
+                    'image': rel_path_to_image,
                     'date': date,
                     'formatted_date': formatted_date,
                     'category': category
@@ -179,16 +201,21 @@ def build_site() -> None:
                 tag_dir_abs = tag_dir.resolve()
                 
                 tag_rel_url = os.path.relpath(html_abs, tag_dir_abs).replace('\\', '/')
-                tag_rel_cover = ''
                 
+                tag_rel_cover = ''
                 if cover:
                     tag_rel_cover = os.path.relpath(cover_abs, tag_dir_abs).replace('\\', '/')
+                    
+                tag_rel_image = ''
+                if image:
+                    tag_rel_image = os.path.relpath(image_abs, tag_dir_abs).replace('\\', '/')
                 
                 tags_map[tag].append({
                     'title': title,
                     'author': author,
                     'url': tag_rel_url,
                     'cover': tag_rel_cover,
+                    'image': tag_rel_image,
                     'date': date,
                     'formatted_date': formatted_date,
                     'category': category 
