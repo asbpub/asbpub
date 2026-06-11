@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mostLikedContainer = document.getElementById('most-liked-container');
 
     const renderPostCard = (post) => {
-        const coverHtml = post.cover ? `<img src="${post.cover}" alt="جلد اثر: ${post.title}" class="post-cover" width="85" height="85" loading="lazy" decoding="async">` : '';
+        const coverHtml = post.cover ? `<img src="${post.cover}" alt="جلد اثر: ${post.title}" class="post-cover" loading="lazy" decoding="async">` : '';
         const dateHtml = post.date ? `<time class="post-date">${post.date}</time>` : '';
         const authorHtml = post.author ? `<span class="post-author">${post.author}</span>` : '';
         
