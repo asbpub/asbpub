@@ -180,7 +180,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewCountEl = document.getElementById('view-count');
     const likeCountEl = document.getElementById('like-count');
     const likeBtn = document.getElementById('like-btn');
-    const currentPath = window.location.pathname; 
+    let currentPath = window.location.pathname
+        .replace(/\/index\.html$/, '')
+        .replace(/\.html$/, '')
+        .replace(/\/$/, '');
+        
+    if (currentPath === '') currentPath = '/';
     
     if (viewCountEl && likeCountEl && likeBtn) {
         const storyTitle = document.querySelector('.story-title')?.innerText || "بدون عنوان";
