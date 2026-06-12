@@ -178,12 +178,17 @@ def build_site() -> None:
             if image_abs:
                 rel_path_to_image_from_root = os.path.relpath(image_abs, root_abs).replace('\\', '/')
                 
+            # FIX: Use Absolute Root Paths for flawless Clean URL routing
+            root_post_url = f"/{clean_url_from_root}"
+            root_cover_url = f"/{rel_path_to_cover_from_root}" if rel_path_to_cover_from_root else ''
+            root_image_url = f"/{rel_path_to_image_from_root}" if rel_path_to_image_from_root else ''
+
             post_data = {
                 'title': title,
                 'author': author,
-                'url': clean_url_from_root, # Passed to templates as Clean URL
-                'cover': rel_path_to_cover_from_root,
-                'image': rel_path_to_image_from_root,
+                'url': root_post_url,
+                'cover': root_cover_url,
+                'image': root_image_url,
                 'date': date,
                 'formatted_date': formatted_date,
                 'category': category 
@@ -196,64 +201,20 @@ def build_site() -> None:
                 'author': author,
                 'tags': tags,
                 'category': CATEGORY_TITLES.get(category, category),
-                'url': clean_url_from_root # Passed to Search as Clean URL
+                'url': root_post_url
             })
             
             # --- Categorization Logic ---
             if category:
                 category_dir = MAIN_DIR / category
-                cat_dir_abs = category_dir.resolve()
-                
-                rel_path_to_post = os.path.relpath(html_abs, cat_dir_abs).replace('\\', '/')
-                clean_rel_post = get_clean_url(rel_path_to_post)
-                
-                rel_path_to_cover = ''
-                if cover_abs:
-                    rel_path_to_cover = os.path.relpath(cover_abs, cat_dir_abs).replace('\\', '/')
-                    
-                rel_path_to_image = ''
-                if image_abs:
-                    rel_path_to_image = os.path.relpath(image_abs, cat_dir_abs).replace('\\', '/')
-                    
-                categories[category].append({
-                    'title': title,
-                    'author': author,
-                    'url': clean_rel_post,
-                    'cover': rel_path_to_cover,
-                    'image': rel_path_to_image,
-                    'date': date,
-                    'formatted_date': formatted_date,
-                    'category': category
-                })
+                category_dir.mkdir(parents=True, exist_ok=True)
+                categories[category].append(post_data)
                 
             # --- Tagging Logic ---
             for tag in tags:
                 tag_dir = TAGS_DIR / tag
                 tag_dir.mkdir(parents=True, exist_ok=True)
-                
-                tag_dir_abs = tag_dir.resolve()
-                
-                tag_rel_url = os.path.relpath(html_abs, tag_dir_abs).replace('\\', '/')
-                clean_tag_rel_url = get_clean_url(tag_rel_url)
-                
-                tag_rel_cover = ''
-                if cover_abs:
-                    tag_rel_cover = os.path.relpath(cover_abs, tag_dir_abs).replace('\\', '/')
-                    
-                tag_rel_image = ''
-                if image_abs:
-                    tag_rel_image = os.path.relpath(image_abs, tag_dir_abs).replace('\\', '/')
-                
-                tags_map[tag].append({
-                    'title': title,
-                    'author': author,
-                    'url': clean_tag_rel_url,
-                    'cover': tag_rel_cover,
-                    'image': tag_rel_image,
-                    'date': date,
-                    'formatted_date': formatted_date,
-                    'category': category 
-                })
+                tags_map[tag].append(post_data)
                     
         except Exception as e:
             print(f"Error processing {md_path}: {e}")
