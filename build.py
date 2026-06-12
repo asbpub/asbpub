@@ -63,6 +63,16 @@ def format_persian_date(date_str: str) -> str:
     
     return str(date_str).translate(en_to_fa)
 
+def get_clean_url(rel_path: str) -> str:
+    """Removes .html and index.html for Vercel Clean URLs to ensure perfect SEO routing."""
+    if rel_path == 'index.html':
+        return ''
+    if rel_path.endswith('/index.html'):
+        return rel_path[:-11]
+    if rel_path.endswith('.html'):
+        return rel_path[:-5]
+    return rel_path
+
 def build_site() -> None:
     print("Starting build process for ASB Publishing...")
     
@@ -92,24 +102,20 @@ def build_site() -> None:
             
             cover_abs = None
             if raw_cover:
-                # Cover is always inside the story folder by default
                 cover_abs = (md_path.parent / raw_cover).resolve()
                 
             image_abs = None
             if raw_image:
-                # Author image is outside the story folder (one level up) by default
                 if raw_image.startswith('../'):
                     image_abs = (md_path.parent / raw_image).resolve()
                 else:
                     image_abs = (md_path.parent.parent / raw_image).resolve()
                     
-            # Fallbacks: if one is missing, fallback to the other gracefully
             if not cover_abs and image_abs:
                 cover_abs = image_abs
             if not image_abs and cover_abs:
                 image_abs = cover_abs
                 
-            # Prepare clean relative paths specifically for the Jinja HTML rendering
             template_cover = ''
             if cover_abs:
                 template_cover = os.path.relpath(cover_abs, md_path.parent).replace('\\', '/')
@@ -135,6 +141,14 @@ def build_site() -> None:
             depth = len(parts) - 1
             base_path = '../' * depth
             
+            # --- Generate SEO Canonical URL & Clean URL ---
+            html_path = md_path.with_suffix('.html')
+            html_abs = html_path.resolve()
+            rel_path_to_post_from_root = os.path.relpath(html_abs, root_abs).replace('\\', '/')
+            
+            clean_url_from_root = get_clean_url(rel_path_to_post_from_root)
+            canonical_url = f"{SITE_URL}/{clean_url_from_root}"
+            
             final_html = template.render(
                 title=title,
                 author=author,
@@ -145,18 +159,16 @@ def build_site() -> None:
                 tags_en=tags_en,
                 category=category,
                 content=html_content,
-                base_path=base_path
+                base_path=base_path,
+                canonical_url=canonical_url
             )
             
-            html_path = md_path.with_suffix('.html')
+            # The physical file MUST retain .html for Vercel to serve it properly
             with open(html_path, 'w', encoding='utf-8') as f:
                 f.write(final_html)
             
-            html_abs = html_path.resolve()
-            
             # --- Homepage, Search & Sitemap Logic ---
-            rel_path_to_post_from_root = os.path.relpath(html_abs, root_abs).replace('\\', '/')
-            sitemap_urls.append(rel_path_to_post_from_root)
+            sitemap_urls.append(clean_url_from_root)
             
             rel_path_to_cover_from_root = ''
             if cover_abs:
@@ -169,7 +181,7 @@ def build_site() -> None:
             post_data = {
                 'title': title,
                 'author': author,
-                'url': rel_path_to_post_from_root,
+                'url': clean_url_from_root, # Passed to templates as Clean URL
                 'cover': rel_path_to_cover_from_root,
                 'image': rel_path_to_image_from_root,
                 'date': date,
@@ -184,7 +196,7 @@ def build_site() -> None:
                 'author': author,
                 'tags': tags,
                 'category': CATEGORY_TITLES.get(category, category),
-                'url': rel_path_to_post_from_root
+                'url': clean_url_from_root # Passed to Search as Clean URL
             })
             
             # --- Categorization Logic ---
@@ -193,6 +205,7 @@ def build_site() -> None:
                 cat_dir_abs = category_dir.resolve()
                 
                 rel_path_to_post = os.path.relpath(html_abs, cat_dir_abs).replace('\\', '/')
+                clean_rel_post = get_clean_url(rel_path_to_post)
                 
                 rel_path_to_cover = ''
                 if cover_abs:
@@ -205,7 +218,7 @@ def build_site() -> None:
                 categories[category].append({
                     'title': title,
                     'author': author,
-                    'url': rel_path_to_post,
+                    'url': clean_rel_post,
                     'cover': rel_path_to_cover,
                     'image': rel_path_to_image,
                     'date': date,
@@ -221,6 +234,7 @@ def build_site() -> None:
                 tag_dir_abs = tag_dir.resolve()
                 
                 tag_rel_url = os.path.relpath(html_abs, tag_dir_abs).replace('\\', '/')
+                clean_tag_rel_url = get_clean_url(tag_rel_url)
                 
                 tag_rel_cover = ''
                 if cover_abs:
@@ -233,7 +247,7 @@ def build_site() -> None:
                 tags_map[tag].append({
                     'title': title,
                     'author': author,
-                    'url': tag_rel_url,
+                    'url': clean_tag_rel_url,
                     'cover': tag_rel_cover,
                     'image': tag_rel_image,
                     'date': date,
@@ -248,14 +262,14 @@ def build_site() -> None:
     try:
         all_posts.sort(key=lambda x: x['date'], reverse=True)
         
-        # Split stories (Newest) and articles (Magazine) for the homepage
         latest_stories = [p for p in all_posts if p['category'] != 'articles'][:6]
         latest_articles = [p for p in all_posts if p['category'] == 'articles'][:6]
         
         final_home = home_template.render(
             latest_posts=latest_stories, 
             latest_articles=latest_articles,
-            base_path=''
+            base_path='',
+            canonical_url=f"{SITE_URL}/"
         )
         with open('index.html', 'w', encoding='utf-8') as f:
             f.write(final_home)
@@ -277,7 +291,7 @@ def build_site() -> None:
             cat_dir.mkdir(parents=True, exist_ok=True)
             
             index_path = cat_dir / 'index.html'
-            sitemap_urls.append(f"main/{cat}/index.html")
+            sitemap_urls.append(f"main/{cat}")
             
             posts = categories.get(cat, [])
             posts.sort(key=lambda x: x['date'], reverse=True)
@@ -287,7 +301,8 @@ def build_site() -> None:
                 category=cat,
                 posts=posts,
                 base_path='../../',
-                is_tag_page=False 
+                is_tag_page=False,
+                canonical_url=f"{SITE_URL}/main/{cat}"
             )
             with open(index_path, 'w', encoding='utf-8') as f:
                 f.write(final_index)
@@ -301,7 +316,7 @@ def build_site() -> None:
             tag_dir.mkdir(parents=True, exist_ok=True)
             
             index_path = tag_dir / 'index.html'
-            sitemap_urls.append(f"main/tags/{quote(tag)}/index.html")
+            sitemap_urls.append(f"main/tags/{quote(tag)}")
             
             posts.sort(key=lambda x: x['date'], reverse=True)
             
@@ -310,7 +325,8 @@ def build_site() -> None:
                 category='tags',
                 posts=posts,
                 base_path='../../../', 
-                is_tag_page=True 
+                is_tag_page=True,
+                canonical_url=f"{SITE_URL}/main/tags/{quote(tag)}"
             )
             with open(index_path, 'w', encoding='utf-8') as f:
                 f.write(final_index)
@@ -324,7 +340,7 @@ def build_site() -> None:
         sitemap_content.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
         
         for url in sitemap_urls:
-            full_url = f"{SITE_URL}/{url}" if url else SITE_URL
+            full_url = f"{SITE_URL}/{url}" if url else f"{SITE_URL}/"
             sitemap_content.append(f'  <url>\n    <loc>{full_url}</loc>\n    <lastmod>{today}</lastmod>\n  </url>')
             
         sitemap_content.append('</urlset>')
