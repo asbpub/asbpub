@@ -3,7 +3,7 @@ title: اپیکاک
 author: کورت وانه‌گات
 translator: امیرمحمد شیرازیان
 category: shortstories
-date: ۱۴۰۵/۰۳/۲۲
+date: ۱۴۰۵/۰۳/۱۹
 cover: epicac-cover.jpg
 image: kurtvonnegut.webp
 tags: [Kurt Vonnegut, Epicac, کورت وانه‌گات, امیرمحمد شیرازیان, علمی‌تخیلی]
