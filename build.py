@@ -18,8 +18,7 @@ CATEGORY_TITLES: Dict[str, str] = {
     'shortstories': 'داستان کوتاه',
     'novels': 'رمان',
     'articles': 'مجله‌ی اسب',
-    'creators': 'پدیدآورندگان',
-    'about': 'درباره‌ی ما'
+    'creators': 'پدیدآورندگان'
 }
 
 MAIN_DIR = Path('main')
@@ -293,6 +292,21 @@ def build_site() -> None:
                 f.write(final_index)
         except Exception as e:
             print(f"Error generating tag index for {tag}: {e}")
+
+    # --- Generate About Page ---
+    try:
+        about_template = env.get_template('about_template.html')
+        final_about = about_template.render(
+            base_path='',
+            canonical_url=f"{SITE_URL}/about.html"
+        )
+        with open('about.html', 'w', encoding='utf-8') as f:
+            f.write(final_about)
+            
+        sitemap_urls.append('about.html')
+        print("Successfully generated about.html")
+    except Exception as e:
+        print(f"Error generating about page: {e}")
 
     # --- Generate Sitemap XML ---
     try:
