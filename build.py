@@ -313,7 +313,10 @@ def build_site() -> None:
         print("Successfully generated about.html")
     except Exception as e:
         print(f"Error generating about page: {e}")
-
+        
+    # --- Inject Standalone Static Pages into Sitemap ---
+        sitemap_urls.extend(['contact', 'collab'])
+    
     # --- Generate Sitemap XML ---
     try:
         today = datetime.now().strftime('%Y-%m-%d')
