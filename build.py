@@ -148,12 +148,31 @@ def build_site() -> None:
             clean_url_from_root = get_clean_url(rel_path_to_post_from_root)
             canonical_url = f"{SITE_URL}/{clean_url_from_root}"
             
+            # --- Path Calculations moved UP for Jinja SEO Injection ---
+            rel_path_to_cover_from_root = ''
+            if cover_abs:
+                rel_path_to_cover_from_root = os.path.relpath(cover_abs, root_abs).replace('\\', '/')
+
+            rel_path_to_image_from_root = ''
+            if image_abs:
+                rel_path_to_image_from_root = os.path.relpath(image_abs, root_abs).replace('\\', '/')
+                
+            # FIX: Use Absolute Root Paths for flawless Clean URL routing
+            root_post_url = f"/{clean_url_from_root}"
+            root_cover_url = f"/{rel_path_to_cover_from_root}" if rel_path_to_cover_from_root else ''
+            root_image_url = f"/{rel_path_to_image_from_root}" if rel_path_to_image_from_root else ''
+            
+            # Generate Absolute Web URL for Open Graph and Schema.org
+            absolute_cover_url = f"{SITE_URL}{root_cover_url}" if root_cover_url else ''
+            
             final_html = template.render(
                 title=title,
                 author=author,
                 translator=translator,
-                cover=template_cover,
+                cover=absolute_cover_url, # Now uses the Absolute URL for Schema & OG tags!
                 image=template_image,
+                date=date,                # Passed for Schema JSON-LD
+                formatted_date=formatted_date, # Passed for the UI Time tag
                 tags_fa=tags_fa,
                 tags_en=tags_en,
                 category=category,
@@ -169,19 +188,6 @@ def build_site() -> None:
             # --- Homepage, Search & Sitemap Logic ---
             sitemap_urls.append(clean_url_from_root)
             
-            rel_path_to_cover_from_root = ''
-            if cover_abs:
-                rel_path_to_cover_from_root = os.path.relpath(cover_abs, root_abs).replace('\\', '/')
-
-            rel_path_to_image_from_root = ''
-            if image_abs:
-                rel_path_to_image_from_root = os.path.relpath(image_abs, root_abs).replace('\\', '/')
-                
-            # FIX: Use Absolute Root Paths for flawless Clean URL routing
-            root_post_url = f"/{clean_url_from_root}"
-            root_cover_url = f"/{rel_path_to_cover_from_root}" if rel_path_to_cover_from_root else ''
-            root_image_url = f"/{rel_path_to_image_from_root}" if rel_path_to_image_from_root else ''
-
             post_data = {
                 'title': title,
                 'author': author,
@@ -298,12 +304,12 @@ def build_site() -> None:
         about_template = env.get_template('about_template.html')
         final_about = about_template.render(
             base_path='',
-            canonical_url=f"{SITE_URL}/about.html"
+            canonical_url=f"{SITE_URL}/about" # Fixed to Clean URL
         )
         with open('about.html', 'w', encoding='utf-8') as f:
             f.write(final_about)
             
-        sitemap_urls.append('about.html')
+        sitemap_urls.append('about') # Fixed to Clean URL
         print("Successfully generated about.html")
     except Exception as e:
         print(f"Error generating about page: {e}")
