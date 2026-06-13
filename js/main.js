@@ -1,9 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Global Constants
-    const basePath = window.ASB_BASE_PATH || '';
-    const ASB_API_URL = ""; // Your Cloudflare Worker URL (via Vercel Rewrite)
-
     // Helper: Security function to prevent XSS attacks in comments
     const escapeHTML = (str) => {
         if (!str) return '';
@@ -96,7 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadSearchData = async () => {
         if (searchIndex !== null) return; 
         try {
-            const response = await fetch(basePath + 'search.json');
+            // Absolute path ensuring it works from any nested directory
+            const response = await fetch('/search.json');
             searchIndex = await response.json();
         } catch (error) {
             console.error("Error loading search index:", error);
@@ -129,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.setAttribute('aria-expanded', 'true');
 
             if (!searchIndex) {
-                searchResultsList.innerHTML = '<li class="sr-empty" role="option">در حال جست‌وجو...</li>';
+                searchResultsList.innerHTML = '<li class="sr-empty" role="option" aria-busy="true">در حال جست‌وجو...</li>';
                 return;
             }
 
@@ -146,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const li = document.createElement('li');
                     li.setAttribute('role', 'option');
                     li.innerHTML = `
-                        <a href="${basePath}${post.url}">
+                        <a href="${post.url}">
                             <span class="sr-title">${post.title}</span>
                             <span class="sr-meta">${post.author} &bull; ${post.category}</span>
                         </a>
@@ -212,7 +209,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const actionType = hasViewed ? 'get_stats' : 'add_view';
             
             try {
-                const response = await fetch(`${ASB_API_URL}/api/view`, {
+                // Using explicit absolute path for Vercel Rewrites
+                const response = await fetch(`/api/view`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -263,9 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let newLikes = action === 'like' ? currentLikes + 1 : Math.max(0, currentLikes - 1);
             likeCountEl.innerText = toPersianDigits(newLikes);
 
-            // 2. Send request to Cloudflare
+            // 2. Send request to Cloudflare via Vercel Proxy
             try {
-                await fetch(`${ASB_API_URL}/api/like`, {
+                await fetch(`/api/like`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -295,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mostLikedContainer = document.getElementById('most-liked-container');
 
     const renderPostCard = (post) => {
-        const coverHtml = post.cover ? `<img src="${post.cover}" alt="جلد اثر: ${post.title}" class="post-cover" loading="lazy" decoding="async">` : '';
+        const coverHtml = post.cover ? `<img src="${post.cover}" alt="جلد اثر: ${post.title}" class="post-cover" loading="lazy" decoding="async" width="160" height="213">` : '';
         const dateHtml = post.date ? `<time class="post-date">${post.date}</time>` : '';
         const authorHtml = post.author ? `<span class="post-author">${post.author}</span>` : '';
         
@@ -313,8 +311,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (mostViewedContainer && mostLikedContainer) {
         const loadHomepageStats = async () => {
+            mostViewedContainer.setAttribute('aria-busy', 'true');
+            mostLikedContainer.setAttribute('aria-busy', 'true');
             try {
-                const response = await fetch(`${ASB_API_URL}/api/top`);
+                const response = await fetch(`/api/top`);
                 if (!response.ok) throw new Error("Failed to fetch top stats");
                 
                 const stats = await response.json();
@@ -336,6 +336,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const errorHtml = '<div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;"><p>خطا در دریافت آمار. لطفاً دوباره تلاش کنید.</p></div>';
                 mostViewedContainer.innerHTML = errorHtml;
                 mostLikedContainer.innerHTML = errorHtml;
+            } finally {
+                mostViewedContainer.setAttribute('aria-busy', 'false');
+                mostLikedContainer.setAttribute('aria-busy', 'false');
             }
         };
 
@@ -366,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnEl.disabled = true;
 
             try {
-                const res = await fetch(`${ASB_API_URL}/api/comment/delete`, {
+                const res = await fetch(`/api/comment/delete`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: currentPath, id: commentId, token: token })
                 });
@@ -453,8 +456,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const loadComments = async () => {
+            commentsList.setAttribute('aria-busy', 'true');
             try {
-                const response = await fetch(`${ASB_API_URL}/api/comments?url=${encodeURIComponent(currentPath)}`);
+                const response = await fetch(`/api/comments?url=${encodeURIComponent(currentPath)}`);
                 if (!response.ok) throw new Error("Failed to load comments");
                 
                 const comments = await response.json();
@@ -520,6 +524,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error("Error loading comments:", error);
                 commentsList.innerHTML = '<div class="empty-state" style="padding: 1.5rem; font-size: 0.95rem;">خطا در دریافت نظرات.</div>';
+            } finally {
+                commentsList.setAttribute('aria-busy', 'false');
             }
         };
         
@@ -545,7 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 commentStatusMsg.innerText = '';
 
                 try {
-                    const response = await fetch(`${ASB_API_URL}/api/comment/add`, {
+                    const response = await fetch(`/api/comment/add`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -599,7 +605,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const overlay = document.createElement('div');
         overlay.className = 'lightbox-overlay';
         overlay.setAttribute('role', 'dialog');
-        overlay.setAttribute('aria-label', 'Full screen image view');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-label', 'نمایش تمام‌صفحه‌ی تصویر');
+        overlay.setAttribute('tabindex', '-1');
         
         const img = document.createElement('img');
         img.className = 'lightbox-img';
@@ -612,6 +620,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lightboxTrigger.addEventListener('click', () => {
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden'; 
+            overlay.focus();
         });
         
         overlay.addEventListener('click', () => {
