@@ -1,17 +1,10 @@
 {
   "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/api/:match*",
       "destination": "https://asbpub-forms.asbpub-official.workers.dev/api/:match*"
-    },
-    {
-      "source": "/contact",
-      "destination": "https://asbpub-forms.asbpub-official.workers.dev/contact"
-    },
-    {
-      "source": "/collab",
-      "destination": "https://asbpub-forms.asbpub-official.workers.dev/collab"
     }
   ]
 }
