@@ -185,6 +185,17 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 
 @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
 
+/* CSS Animation for aria-busy Elements (A11y & Loading feedback) */
+@keyframes pulseGlow {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+[aria-busy="true"] {
+    animation: pulseGlow 1.5s infinite ease-in-out;
+    pointer-events: none;
+}
+
 /* ==========================================================================
    Inline Smart Search 
    ========================================================================== */
@@ -333,7 +344,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 .post-cover {
     width: 140px; 
     aspect-ratio: 3 / 4;
-    height: auto;
+    height: 186.6px; /* Explicit height to prevent CLS */
     object-fit: cover; 
     object-position: center top;
     border-radius: 12px;
@@ -388,7 +399,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 .story-cover {
     width: 160px; 
     aspect-ratio: 3 / 4;
-    height: auto;
+    height: 213.3px; /* Explicit height to prevent CLS */
     object-fit: cover; 
     object-position: center top;
     border-radius: 8px;
@@ -703,7 +714,10 @@ textarea.form-control { resize: vertical; min-height: 140px; }
     .story-header { flex-direction: column-reverse; align-items: center; gap: 1.5rem; }
     .story-meta-container { align-items: center; text-align: center; }
     .story-author-image { margin-right: 0; }
-    .story-cover { width: 130px; }
+    
+    /* Responsive height to prevent CLS on mobile */
+    .story-cover { width: 130px; height: 173.3px; }
+    
     .story-title { font-size: 1.8rem; text-align: center; }
     .story-meta { justify-content: center; }
     .story-body { font-size: 1.05rem; }
@@ -774,4 +788,9 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 
 .lightbox-overlay.active .lightbox-img {
     transform: scale(1);
+}
+
+.lightbox-overlay:focus-visible {
+    outline: 2px solid var(--clr-ochre);
+    outline-offset: -2px;
 }
