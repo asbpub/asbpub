@@ -93,7 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (searchIndex !== null) return; 
         try {
             // Absolute path ensuring it works from any nested directory
-            const response = await fetch('/search.json');
+            const basePath = window.ASB_BASE_PATH || '/';
+            const response = await fetch(`${basePath}search.json`);
             searchIndex = await response.json();
         } catch (error) {
             console.error("Error loading search index:", error);
